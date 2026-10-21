@@ -1,7 +1,7 @@
-import type { Product } from '../product/product';
-
 export type OrderPosition = {
-  product: Product;
+  name: string;
+  type: string;
+  positionType: string;
   quantity: number;
   description?: string;
   tags: string[];

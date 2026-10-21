@@ -10,6 +10,13 @@ import tailwindcss from '@tailwindcss/vite';
 export default defineConfig({
   server: {
     port: 5000,
+    host: '0.0.0.0',
+    cors: true,
+    allowedHosts: ['timon-pc.home'],
+    https: {
+      key: './private-key.pem',
+      cert: './certificate.pem',
+    },
   },
   plugins: [vue(), vueJsx(), vueDevTools(), tailwindcss()],
   resolve: {

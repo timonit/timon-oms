@@ -1,0 +1,11 @@
+@theme {
+  --color-bg: rgb(45, 48, 50);
+  --color-surface: rgb(78, 78, 80);
+  --color-surface-2: rgb(118, 118, 120);
+
+  --color-success: rgb(60, 150, 60);
+  --color-error: rgb(170, 50, 50);
+  --color-warning: rgb(160, 130, 30);
+  --color-info: rgb(80, 80, 170);
+  --color-secondary: rgb(28, 28, 33);
+}

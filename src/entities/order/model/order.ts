@@ -1,4 +1,4 @@
-import type { OrderPosition } from '@/shared/model/order-position';
+import type { OrderPosition } from './order-position';
 
 export type Order = {
   id: string;

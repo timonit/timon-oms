@@ -1,12 +1,19 @@
 <script setup lang="ts">
-import type { Product } from '@/shared/model/product/product.ts';
+import type { Product } from '@/entities/product/model/product.ts';
 import ProductCard from './product.card.vue';
 
 type ProductsGridProps = {
   products: Product[];
+  selected?: string[];
 };
 
-const props = defineProps<ProductsGridProps>();
+const props = withDefaults(
+  defineProps<ProductsGridProps>(),
+  {
+    selected: () => [],
+  }
+);
+
 const emit = defineEmits<{ (e: 'pick', product: Product): void; }>();
 
 const pick = (product: Product) => {
@@ -21,6 +28,7 @@ const pick = (product: Product) => {
       :product="product"
       @click="pick(product)"
       class="cursor-pointer"
+      :class="{ 'bg-amber-500': props.selected.includes(product.name) }"
     />
   </div>
 </template>

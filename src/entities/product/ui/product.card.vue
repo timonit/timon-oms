@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { Product } from '@/shared/model/product';
-import CardMini from '../card.mini.vue';
+import type { Product } from '@/entities/product/model/index.ts';
+import CardMini from '@/shared/ui/card.mini.vue';
 
 type ProductProps = {
   product: Product;
