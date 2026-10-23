@@ -7,10 +7,11 @@ type TogglerControl = {
   toggle: () => void;
 };
 
+export function useToggler(): TogglerControl;
 export function useToggler(initial: boolean): TogglerControl;
 export function useToggler(vueRef: Ref<boolean>): TogglerControl;
-export function useToggler(initialOrRef: boolean | Ref<boolean>): TogglerControl {
-  const state = isRef(initialOrRef) ? initialOrRef : ref(initialOrRef);
+export function useToggler(initialOrRef?: boolean | Ref<boolean>): TogglerControl {
+  const state = !initialOrRef ? ref(false) : isRef(initialOrRef) ? initialOrRef : ref(initialOrRef);
 
   const enable = () => (state.value = true);
   const disable = () => (state.value = false);
