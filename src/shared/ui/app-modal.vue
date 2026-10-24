@@ -20,11 +20,11 @@ const clickOnBG = () => {
   <Teleport to="body">
     <div
       v-if="model"
-      class="modal-bg fixed left-0 top-0 w-dvw h-dvh bg-black/25"
+      class="modal-bg fixed left-0 top-0 w-dvw h-dvh overflow-auto bg-black/25 flex justify-center z-50"
       @click="clickOnBG"
     >
       <div
-        class="absolute top-1/2 left-1/2"
+        class="my-auto"
         @click.stop
       >
         <slot />

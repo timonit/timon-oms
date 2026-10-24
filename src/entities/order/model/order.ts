@@ -9,7 +9,7 @@ export type Order = {
   index: number;
   positions: OrderPosition[];
   status: OrderStatus;
-  totals?: {
+  totals: {
     subTotal: number;
     deliveryFee: number;
     discountAmount: number;

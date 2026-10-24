@@ -9,6 +9,7 @@ type ProductStoreState = {
 
 interface ProductStoreGetters extends _GettersTree<ProductStoreState> {
   getProductByName(state: ProductStoreState): (name: string) => Product | undefined;
+  getProductsByName(state: ProductStoreState): (names: string[]) => Product[];
 }
 
 interface ProductStoreActions {
@@ -61,6 +62,11 @@ export const useProductStore = defineStore<
     getProductByName(state) {
       return (name: string) => {
         return state.products.find((prod) => prod.name === name);
+      };
+    },
+    getProductsByName(state) {
+      return (names: string[]) => {
+        return state.products.filter((prod) => names.includes(prod.name));
       };
     },
   },

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { OrderPosition } from '@/entities/order';
 import { useToggler } from '@/shared/composables';
-import { AppBtn, AppModal, CardMain } from '@/shared/ui';
-import ChangeTags from './change-tags.vue';
+import { AppBtn, AppModal } from '@/shared/ui';
+import { ModificationList } from './modifications';
+import { ModificationChip } from '@/entities/modification';
 
 const emit = defineEmits<{ (e: 'remove'): void; }>();
 const position = defineModel<OrderPosition>({ required: true });
@@ -17,22 +18,27 @@ const { state, enable, disable } = useToggler();
 
 <template>
   <div class="flex flex-col">
-    <div class="flex items-center gap-4 p-2 pl-4 bg-secondary text-white rounded-xl">
-      <div class="w-1/3">
+    <div class="flex items-center justify-between gap-4 p-2 pl-4 bg-secondary text-white rounded-xl relative z-10">
+      <div class="shrink-0 w-1/3">
         {{ position.name }}
       </div>
 
-      <div class="w-1/3">
+      <div class="grow-0 shrink-0">
         <AppBtn
-          text="tags"
+          text="modif"
           @click="enable"
         />
         <AppModal v-model="state">
-          <ChangeTags />
+          <ModificationList
+            :position="position"
+            with-close-btn
+            v-model="position.modifications"
+            @close="disable"
+          />
         </AppModal>
       </div>
 
-      <div class="flex-nowrap flex items-center gap-2 w-1/3">
+      <div class="flex-nowrap flex items-center gap-2">
         <span class="text-nowrap">
           {{ position.quantity }} шт
         </span>
@@ -53,13 +59,20 @@ const { state, enable, disable } = useToggler();
       </div>
     </div>
 
-    <div v-if="position.tags.length">
-      <span>
-        tags:
+    <div
+      v-if="position.modifications.length"
+      class="flex p-4 pb-2 gap-4 bg-secondary/60 relative -top-2 rounded-b-xl"
+    >
+      <span class="text-white">
+        Modifications:
       </span>
-      <span>
-        {{ position.tags }}
-      </span>
+      <div class="flex flex-wrap gap-4">
+        <ModificationChip
+          v-for="modification in position.modifications"
+          :key="modification"
+          :name="modification"
+        />
+      </div>
     </div>
 
     <div v-if="position.description">

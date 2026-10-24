@@ -34,7 +34,7 @@ const rounded = computed(() => {
 
     <div
       v-if="$slots.action"
-      class="mt-8 flex justify-end"
+      class="mt-8 flex justify-between"
     >
       <slot name="action" />
     </div>

@@ -1,5 +1,3 @@
-import { useOrderStore } from '@/entities/order';
-import { useProductStore } from '@/entities/product';
 import { LoadingStatus, NostartedStatus, StartedStatus, type AppStatus } from './app-status';
 
 export class OMSApp extends EventTarget {
@@ -23,13 +21,10 @@ export class OMSApp extends EventTarget {
     this.status = status;
   }
 
-  async init() {
+  async init(fetchingStores: { fetch: () => Promise<void> }[]) {
     this.setStatus(new LoadingStatus());
 
-    const productStore = useProductStore();
-    const orderStore = useOrderStore();
-
-    await Promise.all([productStore.fetch(), orderStore.fetch()]);
+    await Promise.all(fetchingStores.map((store) => store.fetch()));
 
     this.setStatus(new StartedStatus());
   }

@@ -10,6 +10,7 @@ export function productToPosition(product: ProductToPositionDTO): OrderPosition 
     positionType: 'product',
     quantity: 1,
     tags: [],
+    modifications: [],
     ...product,
   };
 }

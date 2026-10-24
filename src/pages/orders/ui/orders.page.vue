@@ -1,14 +1,8 @@
 <script setup lang="ts">
 import { OrderCard, useOrderStore } from '@/entities/order';
 import { DefaultLayout } from '@/shared/ui/layouts';
-// import { useRouter } from 'vue-router';
 
-// const router = useRouter();
 const orderStore = useOrderStore();
-
-// const moveToOrder = (id: string) => {
-//   router.push({ name: 'Order', params: { id } });
-// };
 </script>
 
 <template>
@@ -21,7 +15,6 @@ const orderStore = useOrderStore();
           :order="order"
           class="cursor-pointer"
         />
-        <!-- @click="moveToOrder(order.id)" -->
       </div>
     </div>
   </DefaultLayout>

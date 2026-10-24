@@ -35,9 +35,29 @@ export const useOrderStore = defineStore<
   actions: {
     async fetch() {
       this.fetching = true;
+      let hasOldVersion = false;
       const orderRepo = new OrderRepo();
       const orders = await orderRepo.getOrders();
       const count = orders.length;
+
+      orders.forEach((order) => {
+        order.positions.forEach((pos) => {
+          if (!pos.modifications) {
+            pos.modifications = [];
+            hasOldVersion = true;
+          }
+        });
+        if (!order.totals) {
+          order.totals = {
+            subTotal: 0,
+            deliveryFee: 0,
+            discountAmount: 0,
+            finalTotal: 0,
+          };
+        }
+      });
+      if (hasOldVersion) await orderRepo.setOrders(orders);
+
       this.$patch({
         orders,
         count,
