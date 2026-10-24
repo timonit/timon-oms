@@ -4,6 +4,7 @@ import type { UISize } from './types';
 
 type CardMainProps = {
   rounded?: UISize;
+  disabled?: boolean;
 };
 
 const props = withDefaults(
@@ -20,9 +21,14 @@ const rounded = computed(() => {
 
 <template>
   <div
-    class="p-8 flex flex-col rounded-xl"
-    :class="`${rounded} `"
+    class="p-8 flex flex-col rounded-xl relative"
+    :class="`${rounded}`"
   >
+    <div
+      v-if="props.disabled"
+      class="absolute top-0 left-0 w-full h-full bg-secondary/60 z-40"
+      :class="`${rounded}`"
+    ></div>
     <div
       v-if="$slots.prepend"
       class="mb-8"

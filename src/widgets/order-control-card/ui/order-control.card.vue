@@ -9,9 +9,11 @@ import { watch } from 'vue';
 import { useProductStore } from '@/entities/product/index.ts';
 import { useModificationStore } from '@/entities/modification/index.ts';
 import { closeOrder } from '@/feature/close-order/index.ts';
+import { useRouter } from 'vue-router';
 
 
 const order = defineModel<Order>({ required: true });
+const router = useRouter();
 const productStore = useProductStore();
 const modificationStore = useModificationStore();
 const removePosition = (position: OrderPosition) => {
@@ -51,10 +53,18 @@ watch(order.value, (data) => {
   order.value.totals.subTotal = newTotals.subTotal;
   order.value.totals.finalTotal = newTotals.finalTotal;
 });
+
+const closeOrderCard = () => {
+  closeOrder(order.value);
+  router.push({ name: 'Order' });
+};
 </script>
 
 <template>
-  <CardMain class="bg-info">
+  <CardMain
+    class="bg-info"
+    :disabled="order.status === 'closed'"
+  >
     <template v-slot:prepend>
       <div class="flex gap-4 justify-between text-white">
         <span>#{{ order.index }}</span>
@@ -84,7 +94,7 @@ watch(order.value, (data) => {
       />
       <AppBtn
         text="close order"
-        @click="closeOrder(order)"
+        @click="closeOrderCard"
       />
     </template>
   </CardMain>
