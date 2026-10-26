@@ -5,4 +5,5 @@ export type OrderPosition = {
   quantity: number;
   description?: string;
   tags: string[];
+  modifications: string[];
 };

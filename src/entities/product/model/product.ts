@@ -5,4 +5,5 @@ export type Product = {
   type: string;
   // Optional field for the product's EAN (European Article Number)
   ean?: string;
+  availableModifications?: string[];
 };

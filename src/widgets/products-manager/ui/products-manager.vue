@@ -63,7 +63,7 @@ const toolbarActions = [
         <template v-slot:prepend>
           <AppBtn
             text="delete"
-            @click="() => productStore.deleteProduct(product.id)"
+            @click="() => productStore.delete(product.id)"
           />
         </template>
       </ProductForm>
