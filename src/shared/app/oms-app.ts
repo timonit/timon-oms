@@ -12,9 +12,13 @@ export class OMSApp extends EventTarget {
     this.dispatchEvent(new Event('changeStatus'));
   }
 
+  static instance: OMSApp;
+
   constructor() {
     super();
     this.#status = new NostartedStatus();
+
+    OMSApp.instance = this;
   }
 
   setStatus(status: AppStatus) {

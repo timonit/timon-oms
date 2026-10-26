@@ -4,7 +4,7 @@ import { ProductsManager } from '@/widgets/products-manager';
 </script>
 
 <template>
-  <DefaultLayout>
-    <ProductsManager />
-  </DefaultLayout>
+  <!-- <DefaultLayout> -->
+  <ProductsManager />
+  <!-- </DefaultLayout> -->
 </template>

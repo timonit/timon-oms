@@ -2,10 +2,15 @@
 import { useModificationStore } from '@/entities/modification';
 import { useOrderStore } from '@/entities/order';
 import { useProductStore } from '@/entities/product';
+import { useShiftStore } from '@/entities/shift';
 import { AppStatus, isStatus, LoadingStatus, NostartedStatus, OMSApp, StartedStatus } from '@/shared/app';
 import { APP_INJECT_KEY } from '@/shared/app/app.inject-key';
-import { provide, ref, watch } from 'vue';
+import { DefaultLayout } from '@/shared/ui/layouts';
+import { AppSystembar } from '@/shared/ui/systembar';
+import { ShiftPanel } from '@/widgets/shift-panel';
+import { provide, ref } from 'vue';
 
+const shiftStore = useShiftStore();
 const modificationStore = useModificationStore();
 const productStore = useProductStore();
 const orderStore = useOrderStore();
@@ -17,27 +22,44 @@ app.addEventListener('changeStatus', () => {
   status.value = app.status;
 });
 
-app.init([modificationStore, productStore, orderStore]);
+app.init([shiftStore, modificationStore, productStore, orderStore]);
 provide(APP_INJECT_KEY, app);
 </script>
 
 <template>
   <div>
-    <router-view v-slot="{ Component }">
-      <div
-        v-if="isStatus(status, new LoadingStatus())"
-        class="animate-bounce w-full mt-6 text-2xl text-center text-white"
-      >loading...</div>
-
-      <div
-        v-if="isStatus(status, new NostartedStatus())"
-        class="w-full mt-6 text-2xl text-center text-white"
-      >App no started</div>
-
-      <component
+    <DefaultLayout>
+      <template
         v-if="isStatus(status, new StartedStatus())"
-        :is="Component"
-      />
-    </router-view>
+        v-slot:top-panel
+      >
+        <AppSystembar>
+          <template v-slot:left-side>
+            <shift-panel />
+          </template>
+        </AppSystembar>
+      </template>
+
+      <router-view v-slot="{ Component }">
+        <div
+          v-if="isStatus(status, new LoadingStatus())"
+          class="animate-bounce w-full mt-6 text-2xl text-center text-white"
+        >
+          loading...
+        </div>
+
+        <div
+          v-if="isStatus(status, new NostartedStatus())"
+          class="w-full mt-6 text-2xl text-center text-white"
+        >
+          App no started
+        </div>
+
+        <component
+          v-if="isStatus(status, new StartedStatus())"
+          :is="Component"
+        />
+      </router-view>
+    </DefaultLayout>
   </div>
 </template>

@@ -10,6 +10,7 @@ type OrderStoreState = {
 
 interface OrderStoreGetters extends _GettersTree<OrderStoreState> {
   openedOrders(state: OrderStoreState): Order[];
+  closedOrders(state: OrderStoreState): Order[];
   getOrderWithID(state: OrderStoreState): (id: string) => Order | undefined;
 }
 
@@ -101,6 +102,9 @@ export const useOrderStore = defineStore<
   getters: {
     openedOrders(state) {
       return state.orders.filter((order) => order.status === 'opened');
+    },
+    closedOrders(state) {
+      return state.orders.filter((order) => order.status === 'closed');
     },
     getOrderWithID(state) {
       return (id: string) => state.orders.find((order) => order.id === id);

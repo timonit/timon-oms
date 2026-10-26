@@ -1,3 +1,4 @@
+import { OpenShiftPage } from '@/pages/open-shift';
 import { OrderPage } from '@/pages/order';
 import { OrdersPage } from '@/pages/orders';
 import { ProductsManagerPage } from '@/pages/products-manager';
@@ -8,6 +9,11 @@ export const routes: RouteRecordRaw[] = [
     path: '/',
     component: OrderPage,
     name: 'Home',
+  },
+  {
+    path: '/open-shift',
+    component: OpenShiftPage,
+    name: 'OpenShift',
   },
   {
     path: '/order/:id?',

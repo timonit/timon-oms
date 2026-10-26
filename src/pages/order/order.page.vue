@@ -70,29 +70,29 @@ watch(
 </script>
 
 <template>
-  <DefaultLayout>
-    <div class="flex gap-4 items-center mb-2">
-      <AppBtn
-        text="open order"
-        @click="addOrder"
-      />
+  <!-- <DefaultLayout> -->
+  <div class="flex gap-4 items-center mb-2">
+    <AppBtn
+      text="open order"
+      @click="addOrder"
+    />
 
-      <span v-if="status">{{ status }}</span>
-    </div>
+    <span v-if="status">{{ status }}</span>
+  </div>
 
-    <div class="flex gap-4 w-full flex-col lg:flex-row">
-      <div class="grow-0 shrink-0 lg:w-4/7">
-        <OrderControlCard
-          v-if="order"
-          v-model="order"
-        />
-      </div>
-
-      <ProductsGrid
-        :products="productStore.products"
-        class="grow-0 shrink-0  lg:w-3/7"
-        @pick="pickProducts"
+  <div class="flex gap-4 w-full flex-col lg:flex-row">
+    <div class="grow-0 shrink-0 lg:w-4/7">
+      <OrderControlCard
+        v-if="order"
+        v-model="order"
       />
     </div>
-  </DefaultLayout>
+
+    <ProductsGrid
+      :products="productStore.products"
+      class="grow-0 shrink-0  lg:w-3/7"
+      @pick="pickProducts"
+    />
+  </div>
+  <!-- </DefaultLayout> -->
 </template>
