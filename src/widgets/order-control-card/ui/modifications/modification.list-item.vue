@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Modification } from '@/entities/modification';
+import type { Modification } from '@/shared/model/modification';
 import { computed, inject } from 'vue';
 import { MODIFICATION_LIST_KEY } from './modification.list-service';
 import { useProductStore } from '@/entities/product';

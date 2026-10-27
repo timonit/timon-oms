@@ -1,5 +1,5 @@
 import { defineStore, type _GettersTree } from 'pinia';
-import type { Modification } from './modification';
+import type { Modification, ModificationStoreDefinition } from '@/shared/model/modification';
 import { ModificationRepo } from './modification.repo';
 
 type ModificationStoreState = {
@@ -18,12 +18,12 @@ interface ModificationStoreActions {
   delete(id: string): Promise<void>;
 }
 
-export const useModificationStore = defineStore<
-  'modification',
+export const useModificationStore: ModificationStoreDefinition = defineStore<
+  'modifications',
   ModificationStoreState,
   ModificationStoreGetters,
   ModificationStoreActions
->('modification', {
+>('modifications', {
   state: () => ({
     fetching: false,
     modifications: [],

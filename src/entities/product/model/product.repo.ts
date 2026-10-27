@@ -1,5 +1,5 @@
-import { Repo } from '@/shared/model';
-import type { Product } from './product';
+import { Repo } from '@/shared/model/entity';
+import type { Product } from '@/shared/model/product';
 
 export class ProductRepo extends Repo<Product> {
   storage_name = 'products';

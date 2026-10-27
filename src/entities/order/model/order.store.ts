@@ -1,27 +1,14 @@
 import { defineStore, type _GettersTree } from 'pinia';
-import type { Order } from './order';
 import { OrderRepo } from './order.repo';
+import type {
+  OrderStoreState,
+  OrderStoreGetters,
+  OrderStoreActions,
+  Order,
+  OrderStoreDefinition,
+} from '@/shared/model/order';
 
-type OrderStoreState = {
-  fetching: boolean;
-  orders: Order[];
-  count: number;
-};
-
-interface OrderStoreGetters extends _GettersTree<OrderStoreState> {
-  openedOrders(state: OrderStoreState): Order[];
-  closedOrders(state: OrderStoreState): Order[];
-  getOrderWithID(state: OrderStoreState): (id: string) => Order | undefined;
-}
-
-interface OrderStoreActions {
-  fetch(): Promise<void>;
-  add(order: Order): Promise<void>;
-  delete(id: string): Promise<void>;
-  change(partialOrder: Omit<Partial<Order>, 'createdAt' | 'id'> & { id: string }): Promise<Order>;
-}
-
-export const useOrderStore = defineStore<
+export const useOrderStore: OrderStoreDefinition = defineStore<
   'orders',
   OrderStoreState,
   OrderStoreGetters,
@@ -105,6 +92,28 @@ export const useOrderStore = defineStore<
     },
     closedOrders(state) {
       return state.orders.filter((order) => order.status === 'closed');
+    },
+    ordersAfterDate(state: OrderStoreState) {
+      return (date: Date) => {
+        const dateMS = date.getTime();
+        return state.orders.filter((order) => order.createdAt.getTime() > dateMS);
+      };
+    },
+    openedOrdersAfterDate(state: OrderStoreState) {
+      return (date: Date) => {
+        const dateMS = date.getTime();
+        return state.orders.filter((order) => {
+          return order.status === 'opened' && order.createdAt.getTime() > dateMS;
+        });
+      };
+    },
+    closedOrdersAfterDate(state: OrderStoreState) {
+      return (date: Date) => {
+        const dateMS = date.getTime();
+        return state.orders.filter((order) => {
+          return order.status === 'closed' && order.createdAt.getTime() > dateMS;
+        });
+      };
     },
     getOrderWithID(state) {
       return (id: string) => state.orders.find((order) => order.id === id);

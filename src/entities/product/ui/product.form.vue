@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Product } from '@/entities/product';
+import type { Product } from '@/shared/model/product';
 import { CardMain, FlexCol } from '@/shared/ui';
 import { FormField } from '@/shared/ui/form';
 

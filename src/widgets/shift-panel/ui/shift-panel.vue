@@ -14,8 +14,9 @@ const personal = computed(() => {
 
 
 const closePersonalShift = async () => {
+  const shiftID = shiftStore.shift ? shiftStore.shift.id : undefined;
   await closeShift();
-  router.push({ name: 'OpenShift' });
+  router.push({ name: 'ShiftReport', params: { id: shiftID } });
 };
 </script>
 

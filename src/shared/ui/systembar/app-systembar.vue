@@ -21,6 +21,10 @@ import NavLink from './nav.link.vue';
         :to="{ name: 'Orders' }"
         title="orders"
       />
+      <NavLink
+        :to="{ name: 'ShiftReport' }"
+        title="shift report"
+      />
     </nav>
   </header>
 </template>

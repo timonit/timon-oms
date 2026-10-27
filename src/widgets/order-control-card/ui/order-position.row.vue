@@ -1,12 +1,16 @@
 <script setup lang="ts">
-import type { OrderPosition } from '@/entities/order';
+import type { OrderPosition } from '@/shared/model/order';
 import { useToggler } from '@/shared/composables';
 import { AppBtn, AppModal } from '@/shared/ui';
 import { ModificationList } from './modifications';
-import { ModificationChip } from '@/entities/modification';
+import { ModificationChip, useModificationStore } from '@/entities/modification';
+import { watch } from 'vue';
+import { useProductStore } from '@/entities/product';
 
 const emit = defineEmits<{ (e: 'remove'): void; }>();
 const position = defineModel<OrderPosition>({ required: true });
+const productStore = useProductStore();
+const modificaitonStore = useModificationStore();
 
 const increment = () => position.value.quantity += 1;
 const decrement = () => {
@@ -14,6 +18,20 @@ const decrement = () => {
   position.value.quantity -= 1;
 };
 const { state, enable, disable } = useToggler();
+
+watch(position.value, (pos) => {
+  let totalPrice = 0;
+
+  const product = productStore.getProductByName(pos.name);
+
+  if (product) {
+    totalPrice += Number(product.price) * Number(pos.quantity);
+    const modifications = modificaitonStore.getModificationsByName(pos.modifications);
+    modifications.forEach((m) => totalPrice += Number(m.price));
+  }
+
+  position.value.totalPrice = totalPrice;
+});
 </script>
 
 <template>
@@ -39,6 +57,7 @@ const { state, enable, disable } = useToggler();
       </div>
 
       <div class="flex-nowrap flex items-center gap-2">
+        <span>{{ position.totalPrice }}</span>
         <span class="text-nowrap">
           {{ position.quantity }} шт
         </span>

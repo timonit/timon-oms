@@ -1,25 +1,14 @@
 import { defineStore, type _GettersTree } from 'pinia';
-import type { Product } from './product';
 import { ProductRepo } from './product.repo';
+import type {
+  ProductStoreActions,
+  ProductStoreGetters,
+  ProductStoreState,
+  Product,
+  ProductStoreDifinition,
+} from '@/shared/model/product';
 
-type ProductStoreState = {
-  fetching: boolean;
-  products: Product[];
-};
-
-interface ProductStoreGetters extends _GettersTree<ProductStoreState> {
-  getProductByName(state: ProductStoreState): (name: string) => Product | undefined;
-  getProductsByName(state: ProductStoreState): (names: string[]) => Product[];
-}
-
-interface ProductStoreActions {
-  fetch(): Promise<void>;
-  setProducts(products: Product[]): Promise<void>;
-  add(product: Product): Promise<void>;
-  delete(id: string): Promise<void>;
-}
-
-export const useProductStore = defineStore<
+export const useProductStore: ProductStoreDifinition = defineStore<
   'products',
   ProductStoreState,
   ProductStoreGetters,

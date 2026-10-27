@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { useProductStore, ProductForm, type Product } from '@/entities/product';
+import { useProductStore, ProductForm } from '@/entities/product';
 import { CreateProductForm } from '@/feature/create-product';
+import type { Product } from '@/shared/model/product';
 import { AppBtn, AppCollapse, AppToolbar } from '@/shared/ui';
 import { ref } from 'vue';
 

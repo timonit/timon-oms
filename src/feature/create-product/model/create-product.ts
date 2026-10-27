@@ -1,4 +1,5 @@
-import { useProductStore, type Product } from '@/entities/product';
+import { useProductStore } from '@/entities/product';
+import type { Product } from '@/shared/model/product';
 
 export type CreateProductDTO = {
   name: string;

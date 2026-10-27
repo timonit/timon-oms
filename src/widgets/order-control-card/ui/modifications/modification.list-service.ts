@@ -1,5 +1,6 @@
-import { useModificationStore, type Modification } from '@/entities/modification';
-import type { Product } from '@/entities/product';
+import { type Modification } from '@/shared/model/modification';
+import { useModificationStore } from '@/entities/modification';
+import type { Product } from '@/shared/model/product';
 import { ref, watch, type InjectionKey, type Ref } from 'vue';
 
 export type ModificationListMode = 'add' | 'delete' | 'pick' | 'attach';

@@ -6,4 +6,6 @@ export type OrderPosition = {
   description?: string;
   tags: string[];
   modifications: string[];
+  price: number;
+  totalPrice: number;
 };

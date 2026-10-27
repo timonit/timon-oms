@@ -1,27 +1,14 @@
 import { defineStore, type _GettersTree } from 'pinia';
-import type { Shift, ShiftReport } from './shift';
 import { ShiftRepo } from './shift.repo';
+import type {
+  ShiftStoreState,
+  ShiftStoreGetters,
+  ShiftStoreActions,
+  Shift,
+  ShiftStoreDefinition,
+} from '@/shared/model/shift';
 
-type ShiftStoreState = {
-  shift?: Shift;
-};
-
-interface ShiftStoreGetters extends _GettersTree<ShiftStoreState> {
-  isOpenedShift(state: ShiftStoreState): boolean;
-  person(state: ShiftStoreState): string | undefined;
-  report(state: ShiftStoreState): ShiftReport | undefined;
-}
-
-interface ShiftStoreActions {
-  fetch(): Promise<void>;
-  addShift(shift: Shift): Promise<Shift>;
-  closeShift(): Promise<void>;
-  changeShift(
-    partialShift: Omit<Partial<Shift>, 'openedAt' | 'personID'> & { id: string },
-  ): Promise<Shift>;
-}
-
-export const useShiftStore = defineStore<
+export const useShiftStore: ShiftStoreDefinition = defineStore<
   'shift',
   ShiftStoreState,
   ShiftStoreGetters,
@@ -58,17 +45,16 @@ export const useShiftStore = defineStore<
       return this.shift;
     },
 
-    async closeShift() {
+    async closeShift(shift: Shift) {
       const shiftRepo = new ShiftRepo();
 
       if (!this.shift) throw new Error('No opened shift');
-      const shift = this.shift;
 
       const shifts = await shiftRepo.getShifts();
       const shiftIndex = shifts.findIndex((sh) => sh.id === shift.id);
       if (shiftIndex < 0) throw new Error('Shift is not found');
 
-      shifts[shiftIndex] = { ...shift, status: 'closed' };
+      shifts[shiftIndex] = { ...shift };
 
       await shiftRepo.setShifts(shifts);
 
@@ -103,6 +89,14 @@ export const useShiftStore = defineStore<
     report(state: ShiftStoreState) {
       if (!state.shift) return undefined;
       return state.shift.report;
+    },
+    getShift() {
+      return async (id: string) => {
+        const shiftRepo = new ShiftRepo();
+        const shifts = await shiftRepo.getShifts();
+
+        return shifts.find((shift) => shift.id === id);
+      };
     },
   },
 });

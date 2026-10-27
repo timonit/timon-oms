@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Product } from '@/entities/product/model/product.ts';
+import type { Product } from '@/shared/model/product';
 import ProductCard from './product.card.vue';
 
 type ProductsGridProps = {

@@ -2,6 +2,7 @@ import { OpenShiftPage } from '@/pages/open-shift';
 import { OrderPage } from '@/pages/order';
 import { OrdersPage } from '@/pages/orders';
 import { ProductsManagerPage } from '@/pages/products-manager';
+import { ShiftReportPage } from '@/pages/shift-report';
 import type { RouteRecordRaw } from 'vue-router';
 
 export const routes: RouteRecordRaw[] = [
@@ -29,5 +30,10 @@ export const routes: RouteRecordRaw[] = [
     path: '/orders',
     component: OrdersPage,
     name: 'Orders',
+  },
+  {
+    path: '/shift-report/:id?',
+    component: ShiftReportPage,
+    name: 'ShiftReport',
   },
 ];

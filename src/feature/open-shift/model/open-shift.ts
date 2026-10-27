@@ -1,4 +1,5 @@
-import { useShiftStore, type Shift } from '@/entities/shift';
+import { ShiftEntity, useShiftStore } from '@/entities/shift';
+import type { Shift } from '@/shared/model/shift';
 
 type OpenShiftDTO = {
   personID: string;
@@ -17,7 +18,9 @@ export async function openShift(dto: OpenShiftDTO): Promise<Shift> {
     },
   };
 
-  const addedShift = await shiftStore.addShift(shift);
+  const shiftEnt = new ShiftEntity(shift);
+
+  const addedShift = await shiftStore.addShift(shiftEnt.data);
 
   return addedShift;
 }

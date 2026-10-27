@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { productToPosition, useOrderStore, type Order } from '@/entities/order';
-import { ProductsGrid, useProductStore, type Product } from '@/entities/product';
+import { productToPosition, useOrderStore } from '@/entities/order';
+import { ProductsGrid, useProductStore } from '@/entities/product';
 import { openOrder } from '@/feature/open-order';
+import type { Order } from '@/shared/model/order';
+import type { Product } from '@/shared/model/product';
 import { AppBtn } from '@/shared/ui';
-import { DefaultLayout } from '@/shared/ui/layouts';
 import { OrderControlCard } from '@/widgets/order-control-card';
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -29,8 +30,8 @@ const getPositions = () => {
 
 const pickProducts = async (product: Product) => {
   if (order.value) {
-    const posFromOrder = order.value.positions.find((pos) => pos.name === product.name);
-    if (posFromOrder) return;
+    // const posFromOrder = order.value.positions.find((pos) => pos.name === product.name);
+    // if (posFromOrder) return;
 
     order.value.positions = [...order.value.positions, productToPosition(product)];
   }
@@ -70,7 +71,6 @@ watch(
 </script>
 
 <template>
-  <!-- <DefaultLayout> -->
   <div class="flex gap-4 items-center mb-2">
     <AppBtn
       text="open order"
@@ -94,5 +94,4 @@ watch(
       @pick="pickProducts"
     />
   </div>
-  <!-- </DefaultLayout> -->
 </template>
