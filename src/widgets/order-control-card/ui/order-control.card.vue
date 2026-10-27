@@ -56,6 +56,7 @@ const closeOrderCard = async () => {
     <template v-slot:action>
       <AppBtn
         text="close order"
+        color="warning"
         @click="closeOrderCard"
       />
     </template>

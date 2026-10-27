@@ -50,10 +50,12 @@ const moveToOrder = () => {
     <template v-slot:action>
       <AppBtn
         text="move"
+        color="secondary"
         @click.stop="moveToOrder"
       />
       <AppBtn
         text="delete"
+        color="error"
         @click.stop="enable"
       />
     </template>

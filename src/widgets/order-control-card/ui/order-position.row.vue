@@ -72,6 +72,7 @@ watch(position.value, (pos) => {
           />
           <AppBtn
             text="delete"
+            color="error"
             @click="() => emit('remove')"
           />
         </div>

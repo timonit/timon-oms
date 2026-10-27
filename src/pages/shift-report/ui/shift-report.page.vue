@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useShiftStore } from '@/entities/shift';
 import type { Shift } from '@/shared/model/shift';
-import { FlexCol } from '@/shared/ui';
+import { CardMain, FlexCol } from '@/shared/ui';
+import FieldRow from '@/shared/ui/field.row.vue';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -20,17 +21,60 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div>
-    <FlexCol
-      v-if="shift"
-      :gap="4"
-    >
-      <span>{{ shift.id }}</span>
-      <span>{{ shift.personID }}</span>
-      <span>{{ shift.status }}</span>
-      <span>{{ shift.report }}</span>
-      <span>opened at: {{ shift.openedAt.toLocaleString() }}</span>
-      <span>closed at: {{ shift.closedAt?.toLocaleString() }}</span>
-    </FlexCol>
+  <div class="flex justify-center">
+    <CardMain class="bg-white min-w-100 w-1/2">
+      <template v-slot:prepend>
+        <h1 class="text-2xl font-bold text-center">Отчет</h1>
+      </template>
+
+      <FlexCol
+        v-if="shift"
+        :gap="4"
+      >
+        <FieldRow
+          fieldName="id"
+          :fieldValue="shift.id"
+        />
+        <FieldRow
+          fieldName="personal"
+          :fieldValue="shift.personID"
+        />
+        <FieldRow
+          fieldName="status"
+          :fieldValue="shift.status"
+        />
+        <FlexCol
+          :gap="2"
+          class="bg-info p-2"
+        >
+          <span class="text-white">Report:</span>
+          <div class="flex flex-col items-start">
+            <FieldRow
+              class="bg-transparent"
+              fieldName="total profit"
+              :fieldValue="shift.report.totalProfit"
+            />
+            <FieldRow
+              class="bg-transparent"
+              fieldName="total orders"
+              :fieldValue="shift.report.orders.length"
+            />
+          </div>
+        </FlexCol>
+        <!-- <FieldRow
+          fieldName="report"
+          :fieldValue="shift.report"
+        /> -->
+        <FieldRow
+          fieldName="Opened at"
+          :fieldValue="shift.openedAt.toLocaleString()"
+        />
+        <FieldRow
+          v-if="shift.closedAt"
+          fieldName="Closed at"
+          :fieldValue="shift.closedAt.toLocaleString()"
+        />
+      </FlexCol>
+    </CardMain>
   </div>
 </template>

@@ -64,6 +64,7 @@ const toolbarActions = [
         <template v-slot:prepend>
           <AppBtn
             text="delete"
+            color="error"
             @click="() => productStore.delete(product.id)"
           />
         </template>
