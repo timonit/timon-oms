@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { useShiftStore } from '@/entities/shift';
 import type { Shift } from '@/shared/model/shift';
-import { CardMain, FlexCol } from '@/shared/ui';
+import { AppBtn, CardMain, FlexCol } from '@/shared/ui';
 import FieldRow from '@/shared/ui/field.row.vue';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
+import { clearAllStores } from '../model';
 
 const route = useRoute();
 let id = route.params.id;
@@ -76,5 +77,12 @@ onMounted(async () => {
         />
       </FlexCol>
     </CardMain>
+
+    <div class="fixed bottom-0 left-0 p-4">
+      <AppBtn
+        text="reset all store"
+        @click="clearAllStores"
+      />
+    </div>
   </div>
 </template>
