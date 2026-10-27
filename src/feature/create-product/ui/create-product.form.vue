@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { type Product } from '@/entities/product';
 import { AppBtn, CardMain, FlexCol } from '@/shared/ui';
 import { FormField } from '@/shared/ui/form';
 import { ref, useTemplateRef } from 'vue';
 import { reactive } from 'vue';
 import { createProduct, type CreateProductDTO } from '../model';
+import type { Product } from '@/shared/model/product';
 
 const emit = defineEmits<{ (e: "added", product: Product): void; }>();
 

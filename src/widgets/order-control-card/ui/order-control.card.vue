@@ -1,61 +1,27 @@
 <script setup lang="ts">
 import { AppBtn, CardMain } from '@/shared/ui';
-import type { Order, OrderPosition } from '@/entities/order';
+import type { Order, OrderPosition } from '@/shared/model/order';
 import OrderPositionRow from './order-position.row.vue';
-import { changeOrder } from '@/feature/change-order';
 import { FlexCol } from '@/shared/ui';
 import OrderCalculatePanel from './order-calculate.panel.vue';
 import { watch } from 'vue';
-import { useProductStore } from '@/entities/product/index.ts';
-import { useModificationStore } from '@/entities/modification/index.ts';
 import { closeOrder } from '@/feature/close-order/index.ts';
 import { useRouter } from 'vue-router';
-
+import { changeOrderPositions } from '@/feature/change-order-positions/index.ts';
 
 const order = defineModel<Order>({ required: true });
 const router = useRouter();
-const productStore = useProductStore();
-const modificationStore = useModificationStore();
-const removePosition = (position: OrderPosition) => {
-  order.value.positions = order.value.positions.filter((pos) => pos.name !== position.name);
+
+const removePosition = (position: OrderPosition, index: number) => {
+  order.value.positions = order.value.positions.filter((pos, i) => i !== index);
 };
 
-
-const calculateTotals = () => {
-  let totals: Order['totals'] = {
-    subTotal: 0,
-    deliveryFee: 0,
-    discountAmount: 0,
-    finalTotal: 0
-  };
-
-  order.value.positions.forEach((pos) => {
-    const product = productStore.getProductByName(pos.name);
-    if (!product) throw new Error('Product not found');
-
-    totals.subTotal += (Number(product.price) * Number(pos.quantity));
-    totals.finalTotal += (Number(product.price) * Number(pos.quantity));
-
-    if (pos.modifications.length) {
-      const modifications = modificationStore.getModificationsByName(pos.modifications);
-      modifications.forEach((modif) => {
-        totals.subTotal += Number(modif.price);
-        totals.finalTotal += Number(modif.price);
-      });
-    }
-  });
-
-  return totals;
-};
-
-watch(order.value, (data) => {
-  const newTotals = calculateTotals();
-  order.value.totals.subTotal = newTotals.subTotal;
-  order.value.totals.finalTotal = newTotals.finalTotal;
+watch(order.value, async (data) => {
+  changeOrderPositions({ id: data.id, positions: data.positions });
 });
 
-const closeOrderCard = () => {
-  closeOrder(order.value);
+const closeOrderCard = async () => {
+  await closeOrder(order.value);
   router.push({ name: 'Order' });
 };
 </script>
@@ -79,7 +45,7 @@ const closeOrderCard = () => {
           v-for="(position, index) in order.positions"
           :key="position.name"
           v-model="order.positions[index]"
-          @remove="removePosition(position)"
+          @remove="removePosition(position, index)"
         />
       </div>
 
@@ -89,11 +55,8 @@ const closeOrderCard = () => {
 
     <template v-slot:action>
       <AppBtn
-        text="save"
-        @click="changeOrder(order)"
-      />
-      <AppBtn
         text="close order"
+        color="warning"
         @click="closeOrderCard"
       />
     </template>

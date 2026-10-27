@@ -1,5 +1,5 @@
-import { Repo } from '@/shared/model';
-import type { Order } from './order';
+import { Repo } from '@/shared/model/entity';
+import type { Order } from '../../../shared/model/order/order';
 
 export class OrderRepo extends Repo<Order> {
   storage_name = 'orders';
@@ -9,6 +9,7 @@ export class OrderRepo extends Repo<Order> {
   }
 
   async getOrders(): Promise<Order[]> {
-    return this.getStorage();
+    const orders = await this.getStorage();
+    return orders.map((order) => ({ ...order, createdAt: new Date(order.createdAt) }));
   }
 }

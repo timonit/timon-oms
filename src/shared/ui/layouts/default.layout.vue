@@ -4,7 +4,8 @@ import { AppSystembar } from '../systembar';
 
 <template>
   <div>
-    <app-systembar />
+    <slot name="top-panel"></slot>
+
     <div class="p-4">
       <slot />
     </div>

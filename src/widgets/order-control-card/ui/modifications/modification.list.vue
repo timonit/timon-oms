@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { useModificationStore, type Modification } from '@/entities/modification';
-import { type OrderPosition } from '@/entities/order';
+import { useModificationStore } from '@/entities/modification';
 import { useProductStore } from '@/entities/product';
 import { AppBtn, CardMain, FlexCol } from '@/shared/ui';
 import { FormField } from '@/shared/ui/form';
 import { computed, provide, reactive } from 'vue';
 import { MODIFICATION_LIST_KEY, ModificationListService } from './modification.list-service';
 import ModificationListItem from './modification.list-item.vue';
+import type { Modification } from '@/shared/model/modification/modification.ts';
+import type { OrderPosition } from '@/shared/model/order/order-position.ts';
 
 type ModificationListProps = {
   position: OrderPosition;
@@ -30,14 +31,16 @@ const modificationForm = reactive({
   price: 0
 });
 
-async function addModification(dto: { name: string, price: number; }): Promise<Modification> {
+async function addModification(dto: { name: string, price: number; }) {
   const modification = {
     id: crypto.randomUUID(),
     ...dto,
   };
 
   await modificationStore.add(modification);
-  return modification;
+
+  modificationForm.name = '';
+  modificationForm.price = 0;
 }
 
 const title = computed(() => {

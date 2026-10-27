@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { AppModal, CardMain } from '@/shared/ui';
-import type { Order } from '../model';
+import type { Order } from '@/shared/model/order';
 import OrderCardField from './order.card-field.vue';
 import { useToggler } from '@/shared/composables';
 import { removeOrder } from '@/feature/remove-order';
@@ -50,10 +50,12 @@ const moveToOrder = () => {
     <template v-slot:action>
       <AppBtn
         text="move"
+        color="secondary"
         @click.stop="moveToOrder"
       />
       <AppBtn
         text="delete"
+        color="error"
         @click.stop="enable"
       />
     </template>

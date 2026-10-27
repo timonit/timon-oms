@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Order } from '@/entities/order';
+import type { Order } from '@/shared/model/order';
 
 const props = defineProps<{ order: Order; }>();
 </script>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { useProductStore, ProductForm, type Product } from '@/entities/product';
+import { useProductStore, ProductForm } from '@/entities/product';
 import { CreateProductForm } from '@/feature/create-product';
+import type { Product } from '@/shared/model/product';
 import { AppBtn, AppCollapse, AppToolbar } from '@/shared/ui';
 import { ref } from 'vue';
 
@@ -63,6 +64,7 @@ const toolbarActions = [
         <template v-slot:prepend>
           <AppBtn
             text="delete"
+            color="error"
             @click="() => productStore.delete(product.id)"
           />
         </template>

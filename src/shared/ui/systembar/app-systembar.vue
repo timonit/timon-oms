@@ -3,7 +3,11 @@ import NavLink from './nav.link.vue';
 </script>
 
 <template>
-  <header class="p-2 bg-surface flex items-center justify-end">
+  <header class="p-4 bg-surface flex items-center justify-between">
+    <div>
+      <slot name="left-side" />
+    </div>
+
     <nav class="flex items-center gap-4">
       <NavLink
         :to="{ name: 'Order' }"
@@ -16,6 +20,10 @@ import NavLink from './nav.link.vue';
       <NavLink
         :to="{ name: 'Orders' }"
         title="orders"
+      />
+      <NavLink
+        :to="{ name: 'ShiftReport' }"
+        title="shift report"
       />
     </nav>
   </header>

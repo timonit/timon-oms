@@ -1,5 +1,5 @@
-import { Repo } from '@/shared/model';
-import type { Modification } from './modification';
+import { Repo } from '@/shared/model/entity';
+import type { Modification } from '@/shared/model/modification';
 
 export class ModificationRepo extends Repo<Modification> {
   storage_name = 'modifications';

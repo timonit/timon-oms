@@ -1,5 +1,6 @@
-import { useModificationStore, type Modification } from '@/entities/modification';
-import type { Product } from '@/entities/product';
+import { type Modification } from '@/shared/model/modification';
+import { useModificationStore } from '@/entities/modification';
+import type { Product } from '@/shared/model/product';
 import { ref, watch, type InjectionKey, type Ref } from 'vue';
 
 export type ModificationListMode = 'add' | 'delete' | 'pick' | 'attach';
@@ -19,17 +20,17 @@ export class ModificationListService {
     this.selected = selected;
 
     watch(
-      this.mode,
+      () => [this.mode.value, this.product.availableModifications],
       () => {
         if (product) {
           if (this.mode.value === 'pick') {
             this.modifications.value = modificationStore.getModificationsByName(
-              product.availableModifications || [],
+              product.availableModifications,
             );
           }
           if (this.mode.value === 'delete') {
             this.modifications.value = modificationStore.getModificationsByName(
-              product.availableModifications || [],
+              product.availableModifications,
             );
           }
           if (this.mode.value === 'attach') {
