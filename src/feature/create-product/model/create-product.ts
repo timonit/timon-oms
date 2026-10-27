@@ -16,6 +16,7 @@ export async function createProduct(product: CreateProductDTO): Promise<Product>
   const newProduct: Product = {
     ...product,
     id: crypto.randomUUID(),
+    availableModifications: [],
   };
 
   await productStore.add(newProduct);

@@ -31,14 +31,16 @@ const modificationForm = reactive({
   price: 0
 });
 
-async function addModification(dto: { name: string, price: number; }): Promise<Modification> {
+async function addModification(dto: { name: string, price: number; }) {
   const modification = {
     id: crypto.randomUUID(),
     ...dto,
   };
 
   await modificationStore.add(modification);
-  return modification;
+
+  modificationForm.name = '';
+  modificationForm.price = 0;
 }
 
 const title = computed(() => {

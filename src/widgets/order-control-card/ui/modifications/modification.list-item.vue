@@ -38,7 +38,12 @@ const itemClass = computed(() => {
   }
   if (modificationListService.mode.value === 'pick') return 'bg-secondary hover:bg-secondary/85';
   if (modificationListService.mode.value === 'delete') return 'bg-error hover:bg-error/85';
-  if (modificationListService.mode.value === 'attach') return 'bg-info hover:bg-info/85';
+  if (modificationListService.mode.value === 'attach') {
+    if (modificationListService.product.availableModifications?.includes(props.modification.name)) {
+      return 'bg-success hover:bg-success/85';
+    }
+    return 'bg-info hover:bg-info/85';
+  }
   else return '';
 });
 </script>

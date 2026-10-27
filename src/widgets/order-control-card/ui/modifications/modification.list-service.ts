@@ -20,17 +20,17 @@ export class ModificationListService {
     this.selected = selected;
 
     watch(
-      this.mode,
+      () => [this.mode.value, this.product.availableModifications],
       () => {
         if (product) {
           if (this.mode.value === 'pick') {
             this.modifications.value = modificationStore.getModificationsByName(
-              product.availableModifications || [],
+              product.availableModifications,
             );
           }
           if (this.mode.value === 'delete') {
             this.modifications.value = modificationStore.getModificationsByName(
-              product.availableModifications || [],
+              product.availableModifications,
             );
           }
           if (this.mode.value === 'attach') {
