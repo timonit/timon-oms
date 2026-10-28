@@ -9,7 +9,6 @@ const { state, enable, disable } = useToggler();
 
 const pick = (item: string) => {
   model.value = item;
-  console.log('va', item);
 };
 </script>
 

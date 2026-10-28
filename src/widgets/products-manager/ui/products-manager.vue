@@ -41,7 +41,7 @@ const toolbarActions = [
   <div class="p-4 flex flex-col gap-8">
     <AppToolbar :actions="toolbarActions" />
     <AppCollapse
-      title="add product"
+      title="Добавить продукт"
       v-model="showCreateForm"
       color="info"
     >
@@ -63,7 +63,7 @@ const toolbarActions = [
       >
         <template v-slot:prepend>
           <AppBtn
-            text="delete"
+            text="Удалить"
             color="error"
             @click="() => productStore.delete(product.id)"
           />

@@ -6,6 +6,7 @@ import FieldRow from '@/shared/ui/field.row.vue';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { clearAllStores } from '../model';
+import { closeShift } from '@/feature/close-shift';
 
 const route = useRoute();
 let id = route.params.id;
@@ -19,6 +20,11 @@ onMounted(async () => {
     shift.value = shiftStore.shift;
   }
 });
+
+// @ts-ignore
+window.clearStore = () => {
+  clearAllStores();
+};
 </script>
 
 <template>
@@ -37,52 +43,49 @@ onMounted(async () => {
           :fieldValue="shift.id"
         />
         <FieldRow
-          fieldName="personal"
+          fieldName="Персонал"
           :fieldValue="shift.personID"
         />
         <FieldRow
-          fieldName="status"
+          fieldName="Статус"
           :fieldValue="shift.status"
         />
         <FlexCol
           :gap="2"
           class="bg-info p-2"
         >
-          <span class="text-white">Report:</span>
+          <span class="text-white">Отчет по заказам:</span>
           <div class="flex flex-col items-start">
             <FieldRow
               class="bg-transparent"
-              fieldName="total profit"
+              fieldName="Общая прибыль"
               :fieldValue="shift.report.totalProfit"
             />
             <FieldRow
               class="bg-transparent"
-              fieldName="total orders"
+              fieldName="Всего заказов"
               :fieldValue="shift.report.orders.length"
             />
           </div>
         </FlexCol>
-        <!-- <FieldRow
-          fieldName="report"
-          :fieldValue="shift.report"
-        /> -->
         <FieldRow
-          fieldName="Opened at"
+          fieldName="Открыл смену"
           :fieldValue="shift.openedAt.toLocaleString()"
         />
         <FieldRow
           v-if="shift.closedAt"
-          fieldName="Closed at"
+          fieldName="Закрыл смену"
           :fieldValue="shift.closedAt.toLocaleString()"
         />
       </FlexCol>
-    </CardMain>
 
-    <div class="fixed bottom-0 left-0 p-4">
-      <AppBtn
-        text="reset all store"
-        @click="clearAllStores"
-      />
-    </div>
+      <template v-slot:action>
+        <AppBtn
+          v-if="shiftStore.shift"
+          text="Закрыть смену"
+          @click="closeShift"
+        />
+      </template>
+    </CardMain>
   </div>
 </template>

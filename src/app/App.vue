@@ -45,7 +45,7 @@ provide(APP_INJECT_KEY, app);
           v-if="isStatus(status, new LoadingStatus())"
           class="animate-bounce w-full mt-6 text-2xl text-center text-white"
         >
-          loading...
+          Загрузка...
         </div>
 
         <div

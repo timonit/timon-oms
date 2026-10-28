@@ -73,7 +73,7 @@ watch(
 <template>
   <div class="flex gap-4 items-center mb-2">
     <AppBtn
-      text="open order"
+      text="Открыть заказ"
       @click="addOrder"
     />
 

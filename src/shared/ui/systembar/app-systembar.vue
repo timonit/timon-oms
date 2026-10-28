@@ -11,19 +11,19 @@ import NavLink from './nav.link.vue';
     <nav class="flex items-center gap-4">
       <NavLink
         :to="{ name: 'Order' }"
-        title="Open order"
+        title="Заказ"
       />
       <NavLink
         :to="{ name: 'ProductsManager' }"
-        title="products manager"
+        title="Управление продуктами"
       />
       <NavLink
         :to="{ name: 'Orders' }"
-        title="orders"
+        title="Заказы"
       />
       <NavLink
         :to="{ name: 'ShiftReport' }"
-        title="shift report"
+        title="Отчёт о смене"
       />
     </nav>
   </header>

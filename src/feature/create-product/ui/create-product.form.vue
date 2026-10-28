@@ -49,7 +49,7 @@ const types = computed(() => {
     <CardMain class="bg-info">
       <template v-slot:prepend>
         <h1 class="text-2xl font-bold text-center text-white">
-          Add product
+          Добавление продукта
         </h1>
       </template>
 
@@ -63,40 +63,38 @@ const types = computed(() => {
       </div>
 
       <FlexCol :gap="4">
+        <span class="text-white">Название</span>
         <FormField
           ref="nameField"
           name="name"
           v-model="product.name"
-          placeholder="name"
+          placeholder="Название продукта"
         />
+        <span class="text-white">Цена</span>
         <FormField
           name="price"
           v-model="product.price"
-          placeholder="price"
+          placeholder="Цена"
         />
+        <span class="text-white">Тип продукта</span>
         <FormFieldAutocomplete
-          id="newProduct"
           :list="types"
           name="type"
           v-model="product.type"
-          placeholder="type"
+          placeholder="тип продукта (прим: Напитки, Фастфуд)"
         />
-        <!-- <FormField
-          name="type"
-          v-model="product.type"
-          placeholder="type"
-        /> -->
+        <span class="text-white">Штрихкод</span>
         <FormField
           name="ean"
           v-model="product.ean"
-          placeholder="ean"
+          placeholder="штрихкод"
         />
       </FlexCol>
 
       <template v-slot:action>
         <AppBtn
           type="submit"
-          text="add"
+          text="Добавить"
         />
       </template>
     </CardMain>

@@ -45,10 +45,10 @@ async function addModification(dto: { name: string, price: number; }) {
 
 const title = computed(() => {
   switch (modificationListService.mode.value) {
-    case 'add': return 'add mode';
-    case 'delete': return 'delete mode';
-    case 'attach': return 'attach mode';
-    case 'pick': return 'pick mode';
+    case 'add': return 'Режим добавления';
+    case 'delete': return 'Режим удаления';
+    case 'attach': return 'Режим прикрепления';
+    case 'pick': return 'Режим выбора';
     default: return '';
   }
 });
@@ -62,7 +62,7 @@ const title = computed(() => {
     >
       <div class="flex justify-end">
         <AppBtn
-          text="close"
+          text="Закрыть"
           @click="emit('close')"
         />
       </div>
@@ -110,19 +110,19 @@ const title = computed(() => {
 
       <div class="flex gap-2">
         <AppBtn
-          text="pick mode"
+          text="Режим выбора"
           @click="modificationListService.mode.value = 'pick'"
         />
         <AppBtn
-          text="attach mode"
+          text="Режим прикрепления продукту"
           @click="modificationListService.mode.value = 'attach'"
         />
         <AppBtn
-          text="add mode"
+          text="Создать модификатор"
           @click="modificationListService.mode.value = 'add'"
         />
         <AppBtn
-          text="delete mode"
+          text="Убрать модификатор"
           @click="modificationListService.mode.value = 'delete'"
         />
       </div>

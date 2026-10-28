@@ -35,7 +35,7 @@ const closeOrderCard = async () => {
       <div class="flex gap-4 justify-between text-white">
         <span>#{{ order.index }}</span>
         <span>{{ order.status }}</span>
-        <span>positions: {{ order.positions.length }}</span>
+        <span>позиции: {{ order.positions.length }}</span>
       </div>
     </template>
 
@@ -44,7 +44,7 @@ const closeOrderCard = async () => {
         <OrderPositionRow
           v-for="(position, index) in order.positions"
           :key="position.name"
-          v-model="order.positions[index]"
+          v-model="order.positions[index] as any"
           @remove="removePosition(position, index)"
         />
       </div>
@@ -55,7 +55,7 @@ const closeOrderCard = async () => {
 
     <template v-slot:action>
       <AppBtn
-        text="close order"
+        text="Закрыть заказ"
         color="warning"
         @click="closeOrderCard"
       />

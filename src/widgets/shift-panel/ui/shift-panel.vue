@@ -21,19 +21,18 @@ const closePersonalShift = async () => {
 </script>
 
 <template>
-  <div
-    v-if="shiftStore.isOpenedShift"
-    class="flex gap-4 items-center"
-  >
+  <div class="flex gap-4 items-center">
     <div
-      v-if="personal"
+      v-if="personal && shiftStore.isOpenedShift"
       class="text-white"
     >
       {{ personal }}
     </div>
-    <AppBtn
-      text="close shift"
-      @click="closePersonalShift"
-    />
+    <RouterLink
+      v-if="!shiftStore.isOpenedShift"
+      :to="{ name: 'OpenShift' }"
+    >
+      <AppBtn text="Открыть смену" />
+    </RouterLink>
   </div>
 </template>
