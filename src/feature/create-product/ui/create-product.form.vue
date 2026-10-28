@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { AppBtn, CardMain, FlexCol } from '@/shared/ui';
-import { FormField } from '@/shared/ui/form';
-import { ref, useTemplateRef } from 'vue';
+import { FormField, FormFieldAutocomplete } from '@/shared/ui/form';
+import { computed, ref, useTemplateRef } from 'vue';
 import { reactive } from 'vue';
 import { createProduct, type CreateProductDTO } from '../model';
 import type { Product } from '@/shared/model/product';
+import { useProductStore } from '@/entities/product';
 
 const emit = defineEmits<{ (e: "added", product: Product): void; }>();
 
@@ -33,6 +34,14 @@ const add = async () => {
     else errors.value = err;
   }
 };
+
+const productStore = useProductStore();
+const types = computed(() => {
+  return productStore.products.reduce((acc: string[], prod) => {
+    if (acc.includes(prod.type)) return acc;
+    return [...acc, prod.type];
+  }, [] as string[]);
+});
 </script>
 
 <template>
@@ -68,7 +77,8 @@ const add = async () => {
           placeholder="Цена"
         />
         <span class="text-white">Тип продукта</span>
-        <FormField
+        <FormFieldAutocomplete
+          :list="types"
           name="type"
           v-model="product.type"
           placeholder="тип продукта (прим: Напитки, Фастфуд)"
