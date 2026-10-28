@@ -31,17 +31,17 @@ const moveToOrder = () => {
       />
 
       <OrderCardField
-        prop="status"
+        prop="статус"
         :value="props.order.status"
       />
 
       <OrderCardField
-        prop="positions"
+        prop="Позиции"
         :value="positions"
       />
 
       <OrderCardField
-        prop="createdAt"
+        prop="Создан"
         :value="date"
       />
 
@@ -49,12 +49,12 @@ const moveToOrder = () => {
 
     <template v-slot:action>
       <AppBtn
-        text="move"
+        text="Перейти"
         color="secondary"
         @click.stop="moveToOrder"
       />
       <AppBtn
-        text="delete"
+        text="Удалить"
         color="error"
         @click.stop="enable"
       />
@@ -63,17 +63,17 @@ const moveToOrder = () => {
     <AppModal v-model="state">
       <CardMain class="bg-error text-white w-75 shadow-xl">
         <span>
-          Confirmation delete order #{{ order.index }}
+          Уверены что хотите удалить заказ #{{ order.index }}
         </span>
 
         <template v-slot:action>
           <div class="flex gap-2 justify-between w-full">
             <AppBtn
-              text="cancel"
+              text="Отмена"
               @click="disable"
             />
             <AppBtn
-              text="delete"
+              text="Удалить"
               @click="removeOrder(props.order.id)"
             />
           </div>

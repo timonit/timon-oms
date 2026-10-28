@@ -24,10 +24,10 @@ const openNewShift = async () => {
         <FlexCol :gap="4">
           <FormField
             v-model="name"
-            placeholder="name"
+            placeholder="имя"
           />
           <AppBtn
-            text="open shift"
+            text="Открыть смену"
             type="submit"
           />
         </FlexCol>

@@ -43,7 +43,7 @@ watch(position.value, (pos) => {
 
       <div class="grow-0 shrink-0">
         <AppBtn
-          text="modif"
+          text="модиф"
           @click="enable"
         />
         <AppModal v-model="state">
@@ -71,7 +71,7 @@ watch(position.value, (pos) => {
             @click="decrement"
           />
           <AppBtn
-            text="delete"
+            text="удалить"
             color="error"
             @click="() => emit('remove')"
           />
@@ -84,7 +84,7 @@ watch(position.value, (pos) => {
       class="flex p-4 pb-2 gap-4 bg-secondary/60 relative -top-2 rounded-b-xl"
     >
       <span class="text-white">
-        Modifications:
+        Модификаторы:
       </span>
       <div class="flex flex-wrap gap-4">
         <ModificationChip

@@ -19,7 +19,7 @@ const closedOrders = computed(() => {
 
 <template>
   <FlexCol :gap="12">
-    <span class="text-2xl font-bold text-white">Opened</span>
+    <span class="text-2xl font-bold text-white">Открытые заказы</span>
     <div class="gap-2 grid">
       <OrderCard
         v-for="order in openedOrders"
@@ -29,7 +29,7 @@ const closedOrders = computed(() => {
       />
     </div>
     <hr class="border-white" />
-    <span class="text-2xl font-bold text-white">Closed</span>
+    <span class="text-2xl font-bold text-white">Закрытые заказы</span>
     <div class="gap-2 grid">
       <OrderCard
         v-for="order in closedOrders"
