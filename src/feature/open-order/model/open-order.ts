@@ -1,6 +1,6 @@
 import { useOrderStore } from '@/entities/order';
 import { OrderEntity } from '@/entities/order/model';
-import type { Order, OrderPosition } from '@/shared/model/order';
+import { ORDER_STATUS, type Order, type OrderPosition } from '@/shared/model/order';
 
 export type OpenOrderDTO = {
   positions: OrderPosition[];
@@ -13,7 +13,7 @@ export async function openOrder(dto: OpenOrderDTO): Promise<Order> {
     id: crypto.randomUUID(),
     createdAt: new Date(),
     index: orderStore.count + 1,
-    status: 'opened',
+    status: ORDER_STATUS.opened,
     totals: {
       subTotal: 0,
       deliveryFee: 0,

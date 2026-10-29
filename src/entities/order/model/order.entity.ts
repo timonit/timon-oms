@@ -1,5 +1,5 @@
 import { Entity } from '@/shared/model/entity';
-import type { Order, OrderPosition } from '@/shared/model/order';
+import { ORDER_STATUS, type Order, type OrderPosition } from '@/shared/model/order';
 
 export class OrderEntity extends Entity<Order> {
   constructor(data: Order) {
@@ -30,7 +30,7 @@ export class OrderEntity extends Entity<Order> {
   }
 
   close() {
-    this.data.status = 'closed';
+    this.data.status = ORDER_STATUS.closed;
     this.data.closedAt = new Date();
   }
 }
