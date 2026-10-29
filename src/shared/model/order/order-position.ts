@@ -1,4 +1,5 @@
 export type OrderPosition = {
+  index: number;
   name: string;
   type: string;
   positionType: string;

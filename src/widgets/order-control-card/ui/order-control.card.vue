@@ -1,27 +1,28 @@
 <script setup lang="ts">
 import { AppBtn, CardMain } from '@/shared/ui';
-import type { Order, OrderPosition } from '@/shared/model/order';
+import { ORDER_STATUS, type Order, type OrderPosition } from '@/shared/model/order';
 import OrderPositionRow from './order-position.row.vue';
 import { FlexCol } from '@/shared/ui';
 import OrderCalculatePanel from './order-calculate.panel.vue';
-import { watch } from 'vue';
-import { closeOrder } from '@/feature/close-order/index.ts';
+import { provide } from 'vue';
+import { CloseOrderCard } from '@/feature/close-order';
 import { useRouter } from 'vue-router';
-import { changeOrderPositions } from '@/feature/change-order-positions/index.ts';
+import { ORDER_CONTROL_CARD_SERVICE_INJECT_KEY, OrderControlCardService } from '../model';
+import { useToggler } from '@/shared/composables';
+import AppModal from '@/shared/ui/app-modal.vue';
+import PaymentPanel from './payment.panel.vue';
 
 const order = defineModel<Order>({ required: true });
 const router = useRouter();
+const { state, enable, disable } = useToggler();
+const orderControlCardService = new OrderControlCardService(order);
+provide(ORDER_CONTROL_CARD_SERVICE_INJECT_KEY, orderControlCardService);
 
 const removePosition = (position: OrderPosition, index: number) => {
-  order.value.positions = order.value.positions.filter((pos, i) => i !== index);
+  orderControlCardService.changePositions(order.value.positions.filter((pos, i) => i !== index));
 };
 
-watch(order.value, async (data) => {
-  changeOrderPositions({ id: data.id, positions: data.positions });
-});
-
-const closeOrderCard = async () => {
-  await closeOrder(order.value);
+const goToNewOrder = async () => {
   router.push({ name: 'Order' });
 };
 </script>
@@ -44,20 +45,46 @@ const closeOrderCard = async () => {
         <OrderPositionRow
           v-for="(position, index) in order.positions"
           :key="position.name"
-          v-model="order.positions[index] as any"
+          :position="position"
           @remove="removePosition(position, index)"
         />
       </div>
 
       <hr class="border-white/50" />
       <OrderCalculatePanel :order="order" />
+
+      <PaymentPanel
+        v-if="order.status === ORDER_STATUS.closed"
+        :order="order"
+      />
     </FlexCol>
+
+    <AppModal
+      v-model="state"
+      persistent
+    >
+
+      <CloseOrderCard
+        :order="order"
+        @closed="goToNewOrder"
+      >
+        <template v-slot:prepend>
+          <div class="flex justify-end">
+            <AppBtn
+              text="X"
+              @click="disable"
+            />
+          </div>
+        </template>
+      </CloseOrderCard>
+    </AppModal>
 
     <template v-slot:action>
       <AppBtn
+        v-if="order.status !== ORDER_STATUS.closed"
         text="Закрыть заказ"
         color="warning"
-        @click="closeOrderCard"
+        @click="enable"
       />
     </template>
   </CardMain>

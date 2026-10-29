@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { productToPosition, useOrderStore } from '@/entities/order';
 import { ProductsGrid, useProductStore } from '@/entities/product';
+import { changeOrderPositions } from '@/feature/change-order-positions';
 import { openOrder } from '@/feature/open-order';
 import type { Order } from '@/shared/model/order';
 import type { Product } from '@/shared/model/product';
@@ -19,21 +20,10 @@ const selected = ref<string[]>([]);
 const order = ref<Order | undefined>();
 const status = ref<string | undefined>();
 
-const getPositions = () => {
-  return selected.value.map((name) => {
-    const product = productStore.getProductByName(name);
-    if (!product) throw new Error('Product not found');
-
-    return productToPosition(product);
-  });
-};
-
 const pickProducts = async (product: Product) => {
   if (order.value) {
-    // const posFromOrder = order.value.positions.find((pos) => pos.name === product.name);
-    // if (posFromOrder) return;
-
-    order.value.positions = [...order.value.positions, productToPosition(product)];
+    const positions = [...order.value.positions, productToPosition(product, order.value.positions.length)];
+    order.value = await changeOrderPositions({ id: order.value.id, positions });
   }
 };
 
@@ -43,7 +33,7 @@ const addOrder = async () => {
     selected.value = [];
   }
   const newOrder = await openOrder({
-    positions: getPositions()
+    positions: []
   });
 
   router.push({ name: 'Order', params: { id: newOrder.id } });
