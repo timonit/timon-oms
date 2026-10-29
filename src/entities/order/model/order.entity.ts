@@ -1,7 +1,5 @@
 import { Entity } from '@/shared/model/entity';
-import type { IModificationStore } from '@/shared/model/modification';
 import type { Order, OrderPosition } from '@/shared/model/order';
-import type { IProductStore } from '@/shared/model/product';
 
 export class OrderEntity extends Entity<Order> {
   constructor(data: Order) {
@@ -17,33 +15,18 @@ export class OrderEntity extends Entity<Order> {
     };
 
     this.data.positions.forEach((pos) => {
-      const productStore = OrderEntity.getStore<IProductStore>('products');
-      const modificationStore = OrderEntity.getStore<IModificationStore>('modifications');
-
-      const product = productStore.getProductByName(pos.name);
-      if (!product) throw new Error('Product not found');
-
-      totals.subTotal += Number(pos.price) * Number(pos.quantity);
-      totals.finalTotal += Number(pos.price) * Number(pos.quantity);
-
-      if (pos.modifications.length) {
-        const modifications = modificationStore.getModificationsByName(pos.modifications);
-        modifications.forEach((modif) => {
-          totals.subTotal += Number(modif.price);
-          totals.finalTotal += Number(modif.price);
-        });
-      }
+      totals.subTotal += Number(pos.totalPrice);
+      totals.finalTotal += Number(pos.totalPrice);
     });
 
     return totals;
   }
 
   setPosition(positions: OrderPosition[]) {
-    this.data.positions = positions;
+    this.data.positions = positions.map((pos, index) => ({ ...pos, index }));
 
     const newTotals = this.calculateTotals();
-    this.data.totals.subTotal = newTotals.subTotal;
-    this.data.totals.finalTotal = newTotals.finalTotal;
+    this.data.totals = newTotals;
   }
 
   close() {

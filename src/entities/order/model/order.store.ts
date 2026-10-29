@@ -29,9 +29,13 @@ export const useOrderStore: OrderStoreDefinition = defineStore<
       const count = orders.length;
 
       orders.forEach((order) => {
-        order.positions.forEach((pos) => {
+        order.positions.forEach((pos, index) => {
           if (!pos.modifications) {
             pos.modifications = [];
+            hasOldVersion = true;
+          }
+          if (!pos.index) {
+            pos.index = index;
             hasOldVersion = true;
           }
         });

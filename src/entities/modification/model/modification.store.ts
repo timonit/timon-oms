@@ -52,7 +52,7 @@ export const useModificationStore: ModificationStoreDefinition = defineStore<
   getters: {
     getModificationsByName(state) {
       return (names: string[]) => {
-        if (!names) return [];
+        if (!names || !names.length) return [];
         return state.modifications.filter((mod) => names.includes(mod.name));
       };
     },

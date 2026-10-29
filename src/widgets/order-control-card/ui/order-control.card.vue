@@ -4,21 +4,19 @@ import type { Order, OrderPosition } from '@/shared/model/order';
 import OrderPositionRow from './order-position.row.vue';
 import { FlexCol } from '@/shared/ui';
 import OrderCalculatePanel from './order-calculate.panel.vue';
-import { watch } from 'vue';
-import { closeOrder } from '@/feature/close-order/index.ts';
+import { provide, watch } from 'vue';
+import { closeOrder } from '@/feature/close-order';
 import { useRouter } from 'vue-router';
-import { changeOrderPositions } from '@/feature/change-order-positions/index.ts';
+import { ORDER_CONTROL_CARD_SERVICE_INJECT_KEY, OrderControlCardService } from '../model';
 
 const order = defineModel<Order>({ required: true });
 const router = useRouter();
+const orderControlCardService = new OrderControlCardService(order);
+provide(ORDER_CONTROL_CARD_SERVICE_INJECT_KEY, orderControlCardService);
 
 const removePosition = (position: OrderPosition, index: number) => {
-  order.value.positions = order.value.positions.filter((pos, i) => i !== index);
+  orderControlCardService.changePositions(order.value.positions.filter((pos, i) => i !== index));
 };
-
-watch(order.value, async (data) => {
-  changeOrderPositions({ id: data.id, positions: data.positions });
-});
 
 const closeOrderCard = async () => {
   await closeOrder(order.value);
@@ -44,7 +42,7 @@ const closeOrderCard = async () => {
         <OrderPositionRow
           v-for="(position, index) in order.positions"
           :key="position.name"
-          v-model="order.positions[index] as any"
+          :position="position"
           @remove="removePosition(position, index)"
         />
       </div>

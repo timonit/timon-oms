@@ -3,35 +3,47 @@ import type { OrderPosition } from '@/shared/model/order';
 import { useToggler } from '@/shared/composables';
 import { AppBtn, AppModal } from '@/shared/ui';
 import { ModificationList } from './modifications';
-import { ModificationChip, useModificationStore } from '@/entities/modification';
-import { watch } from 'vue';
-import { useProductStore } from '@/entities/product';
+import { ModificationChip } from '@/entities/modification';
+import { calculatePositionTotalPrice } from '@/entities/order';
+import { inject } from 'vue';
+import { ORDER_CONTROL_CARD_SERVICE_INJECT_KEY } from '../model';
 
 const emit = defineEmits<{ (e: 'remove'): void; }>();
-const position = defineModel<OrderPosition>({ required: true });
-const productStore = useProductStore();
-const modificaitonStore = useModificationStore();
+const props = defineProps<{ position: OrderPosition; }>();
+const orderControlCardService = inject(ORDER_CONTROL_CARD_SERVICE_INJECT_KEY);
+if (!orderControlCardService) throw new Error('orderControlCardService not found');
 
-const increment = () => position.value.quantity += 1;
+const increment = () => {
+  const updatedPosition = {
+    ...props.position,
+    quantity: props.position.quantity + 1,
+  };
+
+  orderControlCardService.changePosition({
+    ...updatedPosition,
+    totalPrice: calculatePositionTotalPrice(updatedPosition),
+  });
+};
+
 const decrement = () => {
-  if (position.value.quantity < 2) return;
-  position.value.quantity -= 1;
+  if (props.position.quantity < 2) return;
+
+  const updatedPosition = {
+    ...props.position,
+    quantity: props.position.quantity - 1,
+  };
+
+  orderControlCardService.changePosition({
+    ...updatedPosition,
+    totalPrice: calculatePositionTotalPrice(updatedPosition),
+  });
 };
 const { state, enable, disable } = useToggler();
 
-watch(position.value, (pos) => {
-  let totalPrice = 0;
-
-  const product = productStore.getProductByName(pos.name);
-
-  if (product) {
-    totalPrice += Number(product.price) * Number(pos.quantity);
-    const modifications = modificaitonStore.getModificationsByName(pos.modifications);
-    modifications.forEach((m) => totalPrice += Number(m.price));
-  }
-
-  position.value.totalPrice = totalPrice;
-});
+const changeModifications = (modifications: string[]) => {
+  const updatedPosition = { ...props.position, modifications };
+  orderControlCardService.changePosition({ ...updatedPosition, totalPrice: calculatePositionTotalPrice(updatedPosition) });
+};
 </script>
 
 <template>
@@ -50,7 +62,8 @@ watch(position.value, (pos) => {
           <ModificationList
             :position="position"
             with-close-btn
-            v-model="position.modifications"
+            :model-value="position.modifications"
+            @update:model-value="changeModifications"
             @close="disable"
           />
         </AppModal>
