@@ -1,5 +1,11 @@
+import { NotEnoughMoneyError } from '@/feature/close-order/errors';
 import { Entity } from '@/shared/model/entity';
-import { ORDER_STATUS, type Order, type OrderPosition } from '@/shared/model/order';
+import {
+  ORDER_STATUS,
+  type Order,
+  type OrderPayment,
+  type OrderPosition,
+} from '@/shared/model/order';
 
 export class OrderEntity extends Entity<Order> {
   constructor(data: Order) {
@@ -29,8 +35,13 @@ export class OrderEntity extends Entity<Order> {
     this.data.totals = newTotals;
   }
 
-  close() {
+  close(paymentData: OrderPayment) {
+    let inputMoney = 0;
+    paymentData.payments.forEach((p) => (inputMoney += Number(p.amount)));
+
+    if (inputMoney < this.data.totals.finalTotal) throw new NotEnoughMoneyError();
     this.data.status = ORDER_STATUS.closed;
     this.data.closedAt = new Date();
+    this.data.payment = paymentData;
   }
 }

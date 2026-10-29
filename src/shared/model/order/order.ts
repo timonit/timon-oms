@@ -20,7 +20,7 @@ export type Order = {
     discountAmount: number;
     finalTotal: number;
   };
-  pay?: OrderPayment;
+  payment?: OrderPayment;
 };
 
 export type OpenedOrder = {
@@ -50,5 +50,5 @@ export type ClosedOrder = {
     discountAmount: number;
     finalTotal: number;
   };
-  pay: OrderPayment;
+  payment: OrderPayment;
 };
