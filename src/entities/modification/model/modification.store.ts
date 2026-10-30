@@ -1,22 +1,12 @@
 import { defineStore, type _GettersTree } from 'pinia';
-import type { Modification, ModificationStoreDefinition } from '@/shared/model/modification';
+import type {
+  Modification,
+  ModificationStoreActions,
+  ModificationStoreDefinition,
+  ModificationStoreGetters,
+  ModificationStoreState,
+} from '@/shared/model/modification';
 import { ModificationRepo } from './modification.repo';
-
-type ModificationStoreState = {
-  fetching: boolean;
-  modifications: Modification[];
-};
-
-interface ModificationStoreGetters extends _GettersTree<ModificationStoreState> {
-  getModificationsByName(state: ModificationStoreState): (names: string[]) => Modification[];
-}
-
-interface ModificationStoreActions {
-  fetch(): Promise<void>;
-  setModifications(modifications: Modification[]): Promise<void>;
-  add(modification: Modification): Promise<void>;
-  delete(id: string): Promise<void>;
-}
 
 export const useModificationStore: ModificationStoreDefinition = defineStore<
   'modifications',
