@@ -3,16 +3,16 @@ import { useModificationStore } from '@/entities/modification';
 import { useProductStore } from '@/entities/product';
 import { AppBtn, CardMain, FlexCol } from '@/shared/ui';
 import { FormField } from '@/shared/ui/form';
-import { computed, inject, provide, reactive } from 'vue';
+import { computed, provide, reactive } from 'vue';
 import { MODIFICATION_LIST_KEY, ModificationListService } from './modification.list-service';
 import ModificationListItem from './modification.list-item.vue';
 import type { Modification } from '@/shared/model/modification/modification.ts';
 import type { OrderPosition } from '@/shared/model/order/order-position.ts';
-import { ORDER_CONTROL_CARD_SERVICE_INJECT_KEY } from '../../model/order-control-card.service.ts';
 
 type ModificationListProps = {
   position: OrderPosition;
   withCloseBtn?: boolean;
+  onlyPick?: boolean;
 };
 
 const props = defineProps<ModificationListProps>();
@@ -23,9 +23,6 @@ const productStore = useProductStore();
 const modificationStore = useModificationStore();
 const product = productStore.getProductByName(props.position.name);
 if (!product) throw new Error('Product not found');
-
-// const orderControlCardService = inject(ORDER_CONTROL_CARD_SERVICE_INJECT_KEY);
-// if (!orderControlCardService) throw 'orderControlCardService not found';
 
 const modificationListService = new ModificationListService(product, selected);
 provide(MODIFICATION_LIST_KEY, modificationListService);
@@ -59,7 +56,7 @@ const title = computed(() => {
 </script>
 
 <template>
-  <CardMain class="bg-surface shadow-lg">
+  <CardMain class="bg-surface shadow-lg min-w-85">
     <template
       v-if="props.withCloseBtn"
       v-slot:prepend
@@ -113,22 +110,24 @@ const title = computed(() => {
     <template v-slot:action>
 
       <div class="flex gap-2">
-        <AppBtn
-          text="Режим выбора"
-          @click="modificationListService.mode.value = 'pick'"
-        />
-        <AppBtn
-          text="Режим прикрепления продукту"
-          @click="modificationListService.mode.value = 'attach'"
-        />
-        <AppBtn
-          text="Создать модификатор"
-          @click="modificationListService.mode.value = 'add'"
-        />
-        <AppBtn
-          text="Убрать модификатор"
-          @click="modificationListService.mode.value = 'delete'"
-        />
+        <template v-if="!props.onlyPick">
+          <AppBtn
+            text="Режим выбора"
+            @click="modificationListService.mode.value = 'pick'"
+          />
+          <AppBtn
+            text="Режим прикрепления продукту"
+            @click="modificationListService.mode.value = 'attach'"
+          />
+          <AppBtn
+            text="Создать модификатор"
+            @click="modificationListService.mode.value = 'add'"
+          />
+          <AppBtn
+            text="Убрать модификатор"
+            @click="modificationListService.mode.value = 'delete'"
+          />
+        </template>
       </div>
 
     </template>

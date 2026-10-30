@@ -65,6 +65,7 @@ const changeModifications = (modifications: string[]) => {
             :model-value="position.modifications"
             @update:model-value="changeModifications"
             @close="disable"
+            only-pick
           />
         </AppModal>
       </div>
