@@ -14,12 +14,16 @@ import NavLink from './nav.link.vue';
         title="Заказ"
       />
       <NavLink
+        :to="{ name: 'Orders' }"
+        title="Заказы"
+      />
+      <NavLink
         :to="{ name: 'ProductsManager' }"
         title="Управление продуктами"
       />
       <NavLink
-        :to="{ name: 'Orders' }"
-        title="Заказы"
+        :to="{ name: 'Modifications' }"
+        title="Модификации"
       />
       <NavLink
         :to="{ name: 'ShiftReport' }"
