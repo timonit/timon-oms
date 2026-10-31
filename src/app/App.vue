@@ -27,39 +27,37 @@ provide(APP_INJECT_KEY, app);
 </script>
 
 <template>
-  <div>
-    <DefaultLayout>
-      <template
-        v-if="isStatus(status, new StartedStatus())"
-        v-slot:top-panel
+  <DefaultLayout>
+    <template
+      v-if="isStatus(status, new StartedStatus())"
+      v-slot:top-panel
+    >
+      <AppSystembar>
+        <template v-slot:left-side>
+          <shift-panel />
+        </template>
+      </AppSystembar>
+    </template>
+
+    <router-view v-slot="{ Component }">
+      <div
+        v-if="isStatus(status, new LoadingStatus())"
+        class="animate-bounce w-full mt-6 text-2xl text-center text-white"
       >
-        <AppSystembar>
-          <template v-slot:left-side>
-            <shift-panel />
-          </template>
-        </AppSystembar>
-      </template>
+        Загрузка...
+      </div>
 
-      <router-view v-slot="{ Component }">
-        <div
-          v-if="isStatus(status, new LoadingStatus())"
-          class="animate-bounce w-full mt-6 text-2xl text-center text-white"
-        >
-          Загрузка...
-        </div>
+      <div
+        v-if="isStatus(status, new NostartedStatus())"
+        class="w-full mt-6 text-2xl text-center text-white"
+      >
+        App no started
+      </div>
 
-        <div
-          v-if="isStatus(status, new NostartedStatus())"
-          class="w-full mt-6 text-2xl text-center text-white"
-        >
-          App no started
-        </div>
-
-        <component
-          v-if="isStatus(status, new StartedStatus())"
-          :is="Component"
-        />
-      </router-view>
-    </DefaultLayout>
-  </div>
+      <component
+        v-if="isStatus(status, new StartedStatus())"
+        :is="Component"
+      />
+    </router-view>
+  </DefaultLayout>
 </template>

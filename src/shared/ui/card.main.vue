@@ -26,7 +26,7 @@ const rounded = computed(() => {
   >
     <div
       v-if="props.disabled"
-      class="absolute top-0 left-0 w-full h-full bg-secondary/60 z-40"
+      class="absolute top-0 left-0 h-full bg-secondary/60 z-40"
       :class="`${rounded}`"
     ></div>
     <div

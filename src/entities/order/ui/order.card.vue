@@ -19,6 +19,11 @@ const positions = props.order.positions.map((pos) => pos.name).join(', ');
 const moveToOrder = () => {
   router.push({ name: 'Order', params: { id: props.order.id } });
 };
+
+const payTitle = {
+  'card': 'Карта',
+  'cash': 'Наличные'
+};
 </script>
 
 <template>
@@ -33,6 +38,19 @@ const moveToOrder = () => {
       <OrderCardField
         prop="статус"
         :value="props.order.status"
+      />
+
+      <OrderCardField
+        prop="Сумма к оплате"
+        :value="props.order.totals.finalTotal"
+      />
+
+
+      <OrderCardField
+        v-for="(pay, index) in props.order.payment?.payments"
+        :key="index"
+        :prop="`Оплата ${payTitle[pay.paymentMethod]}`"
+        :value="pay.amount"
       />
 
       <OrderCardField

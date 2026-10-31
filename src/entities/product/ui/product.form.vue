@@ -22,82 +22,80 @@ const { state: showModifSelect, toggle } = useToggler();
 </script>
 
 <template>
-  <form @submit.prevent>
-    <CardMain class="bg-info">
-      <template
-        v-if="$slots.prepend"
-        v-slot:prepend
-      >
-        <slot name="prepend" />
-      </template>
-      <span class="hidden">id: {{ product.id }}</span>
+  <CardMain class="bg-info">
+    <template
+      v-if="$slots.prepend"
+      v-slot:prepend
+    >
+      <slot name="prepend" />
+    </template>
+    <span class="hidden">id: {{ product.id }}</span>
 
-      <FlexCol :gap="4">
-        <FormField
-          name="name"
-          v-model="product.name"
-          placeholder="name"
-        />
-        <FormField
-          name="price"
-          v-model="product.price"
-          placeholder="price"
-          type="number"
-        />
-        <FormFieldAutocomplete
-          :id="product.name"
-          name="type"
-          v-model="product.type"
-          placeholder="type"
-          :list="types"
-        />
-        <FormField
-          name="ean"
-          v-model="product.ean"
-          placeholder="ean"
+    <FlexCol :gap="4">
+      <FormField
+        name="name"
+        v-model="product.name"
+        placeholder="name"
+      />
+      <FormField
+        name="price"
+        v-model="product.price"
+        placeholder="price"
+        type="number"
+      />
+      <FormFieldAutocomplete
+        :id="product.name"
+        name="type"
+        v-model="product.type"
+        placeholder="type"
+        :list="types"
+      />
+      <FormField
+        name="ean"
+        v-model="product.ean"
+        placeholder="ean"
+      />
+
+      <FlexCol class="p-2 border border-white rounded-lg relative">
+        <AppBtn
+          :text="showModifSelect ? 'Скрыть' : 'Добавить'"
+          color="secondary"
+          @click="toggle"
+          class="mb-4"
         />
 
-        <FlexCol class="p-2 border border-white rounded-lg relative">
-          <AppBtn
-            :text="showModifSelect ? 'Скрыть' : 'Добавить'"
-            color="secondary"
-            @click="toggle"
-            class="mb-4"
-          />
-
-          <select
-            v-if="showModifSelect"
-            v-model="product.availableModifications"
-            placeholder="модификаторы"
-            multiple
-            class="bg-white"
+        <select
+          v-if="showModifSelect"
+          v-model="product.availableModifications"
+          placeholder="модификаторы"
+          multiple
+          class="bg-white"
+        >
+          <option
+            v-for="modif in modificationStore.modifications"
+            :key="modif.id"
+            :value="modif.name"
+            class="p-2"
           >
-            <option
-              v-for="modif in modificationStore.modifications"
-              :key="modif.id"
-              :value="modif.name"
-              class="p-2"
-            >
-              {{ modif.name }}
-            </option>
-          </select>
+            {{ modif.name }}
+          </option>
+        </select>
 
-          <ul
-            v-else
-            class="text-white"
+        <ul
+          v-else
+          class="text-white"
+        >
+          <li
+            v-for="modif of product.availableModifications"
+            :key="modif"
+            class="bg-white/10 p-2 my-1 rounded-lg mr-2"
           >
-            <li
-              v-for="modif of product.availableModifications"
-              :key="modif"
-              class="bg-white/10 p-2 my-1 rounded-lg mr-2"
-            >
-              {{ modif }}
-            </li>
-          </ul>
-        </FlexCol>
-
+            {{ modif }}
+          </li>
+        </ul>
       </FlexCol>
 
-    </CardMain>
-  </form>
+    </FlexCol>
+
+  </CardMain>
 </template>
