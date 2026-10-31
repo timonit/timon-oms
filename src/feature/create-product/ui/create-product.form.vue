@@ -7,7 +7,7 @@ import { createProduct, type CreateProductDTO } from '../model';
 import type { Product } from '@/shared/model/product';
 import { useProductStore } from '@/entities/product';
 
-const emit = defineEmits<{ (e: "added", product: Product): void; }>();
+const emit = defineEmits<{ (e: "added", product: Product): void; (e: 'cancel'): void; }>();
 
 const nameFieldEl = useTemplateRef('nameField');
 const errors = ref();
@@ -48,7 +48,7 @@ const types = computed(() => {
   <form @submit.prevent="add">
     <CardMain class="bg-info">
       <template v-slot:prepend>
-        <h1 class="text-2xl font-bold text-center text-white">
+        <h1 class="text-lg font-bold text-center text-white">
           Добавление продукта
         </h1>
       </template>
@@ -62,36 +62,50 @@ const types = computed(() => {
         </span>
       </div>
 
-      <FlexCol :gap="4">
-        <span class="text-white">Название</span>
-        <FormField
-          ref="nameField"
-          name="name"
-          v-model="product.name"
-          placeholder="Название продукта"
-        />
-        <span class="text-white">Цена</span>
-        <FormField
-          name="price"
-          v-model="product.price"
-          placeholder="Цена"
-        />
-        <span class="text-white">Тип продукта</span>
-        <FormFieldAutocomplete
-          :list="types"
-          name="type"
-          v-model="product.type"
-          placeholder="тип продукта (прим: Напитки, Фастфуд)"
-        />
-        <span class="text-white">Штрихкод</span>
-        <FormField
-          name="ean"
-          v-model="product.ean"
-          placeholder="штрихкод"
-        />
-      </FlexCol>
+      <div class="grid gap-6 grid-cols-1 lg:grid-cols-2 ">
+        <div class="flex flex-col">
+          <span class="text-white">Название</span>
+          <FormField
+            ref="nameField"
+            name="name"
+            v-model="product.name"
+            placeholder="Название продукта"
+          />
+        </div>
+        <div class="flex flex-col">
+          <span class="text-white">Цена</span>
+          <FormField
+            name="price"
+            v-model="product.price"
+            placeholder="Цена"
+            type="number"
+          />
+        </div>
+        <div class="flex flex-col">
+          <span class="text-white">Тип продукта</span>
+          <FormFieldAutocomplete
+            :list="types"
+            name="type"
+            v-model="product.type"
+            placeholder="тип продукта (прим: Напитки, Фастфуд)"
+          />
+        </div>
+        <div class="flex flex-col">
+          <span class="text-white">Штрихкод</span>
+          <FormField
+            name="ean"
+            v-model="product.ean"
+            placeholder="штрихкод"
+          />
+        </div>
+      </div>
 
       <template v-slot:action>
+        <AppBtn
+          color="error"
+          text="Отмена"
+          @click="emit('cancel')"
+        />
         <AppBtn
           type="submit"
           text="Добавить"

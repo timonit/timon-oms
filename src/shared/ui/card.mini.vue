@@ -8,7 +8,7 @@ const props = defineProps<CardMiniProps>();
 
 <template>
   <div
-    class="product-card flex flex-col justify-between items-center border border-neutral-200 p-2 gap-2 rounded-lg hover:bg-neutral-200"
+    class="product-card flex flex-col justify-between items-center border border-neutral-200 p-2 gap-2 rounded-lg bg-white/80"
     :class="{ 'hover:bg-neutral-200': props.hover }"
   >
     <div class="prepend-block">

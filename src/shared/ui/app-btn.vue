@@ -8,6 +8,7 @@ type AppBtnProps = {
   text?: string;
   rounded?: UISize;
   color?: BtnColor;
+  type?: 'submit' | 'reset' | 'button';
 };
 
 const props = withDefaults(
@@ -15,6 +16,7 @@ const props = withDefaults(
   {
     rounded: 'md',
     color: 'success',
+    type: 'button'
   }
 );
 
@@ -24,9 +26,10 @@ let color = computed(() => styles.getPropertyValue(`--color-${props.color}`));
 
 <template>
   <button
-    class="py-2 px-4 uppercase text-white cursor-pointer rounded-md"
+    class="py-2 px-4 uppercase text-white cursor-pointer rounded-md select-none"
     :style="`--bg-color: ${color}`"
     :class="`bg-(--bg-color) hover:bg-(--bg-color)/60`"
+    :type="props.type"
   >
     <slot>
       {{ props.text }}

@@ -70,17 +70,17 @@ watch(
     <span v-if="status">{{ status }}</span>
   </div>
 
-  <div class="flex gap-4 w-full flex-col lg:flex-row">
+  <div
+    v-if="order"
+    class="flex gap-4 flex-col lg:flex-row"
+  >
     <div class="grow-0 shrink-0 lg:w-4/7">
-      <OrderControlCard
-        v-if="order"
-        v-model="order"
-      />
+      <OrderControlCard v-model="order" />
     </div>
 
     <ProductsGrid
       :products="productStore.products"
-      class="grow-0 shrink-0  lg:w-3/7"
+      class="grow shrink"
       @pick="pickProducts"
     />
   </div>
