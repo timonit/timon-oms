@@ -2,7 +2,7 @@
 import { useToggler } from '@/shared/composables';
 import AppDropdown from '../app-dropdown.vue';
 
-const props = defineProps<{ list: string[]; }>();
+const props = defineProps<{ list: string[]; label?: string; }>();
 const model = defineModel();
 
 const { state, enable, disable } = useToggler();
@@ -14,6 +14,10 @@ const pick = (item: string) => {
 
 <template>
   <div class="relative">
+    <label
+      v-if="props.label"
+      class="text-white text-xs"
+    >{{ props.label }}</label>
     <input
       class="rounded-lg p-2 bg-white/80 w-full"
       v-model="model"
