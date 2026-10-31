@@ -33,11 +33,13 @@ const { state: showModifSelect, toggle } = useToggler();
 
     <FlexCol :gap="4">
       <FormField
+        label="Название"
         name="name"
         v-model="product.name"
         placeholder="name"
       />
       <FormField
+        label="Цена"
         name="price"
         v-model="product.price"
         placeholder="price"
@@ -45,12 +47,14 @@ const { state: showModifSelect, toggle } = useToggler();
       />
       <FormFieldAutocomplete
         :id="product.name"
+        label="Тип"
         name="type"
         v-model="product.type"
         placeholder="type"
         :list="types"
       />
       <FormField
+        label="Штрихкод"
         name="ean"
         v-model="product.ean"
         placeholder="ean"
