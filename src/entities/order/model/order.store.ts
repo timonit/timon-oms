@@ -6,6 +6,8 @@ import type {
   OrderStoreActions,
   Order,
   OrderStoreDefinition,
+  ClosedOrder,
+  OpenedOrder,
 } from '@/shared/model/order';
 
 export const useOrderStore: OrderStoreDefinition = defineStore<
@@ -92,10 +94,10 @@ export const useOrderStore: OrderStoreDefinition = defineStore<
 
   getters: {
     openedOrders(state) {
-      return state.orders.filter((order) => order.status === 'opened');
+      return state.orders.filter((order) => order.status === 'opened') as OpenedOrder[];
     },
     closedOrders(state) {
-      return state.orders.filter((order) => order.status === 'closed');
+      return state.orders.filter((order) => order.status === 'closed') as ClosedOrder[];
     },
     ordersAfterDate(state: OrderStoreState) {
       return (date: Date) => {
@@ -108,7 +110,7 @@ export const useOrderStore: OrderStoreDefinition = defineStore<
         const dateMS = date.getTime();
         return state.orders.filter((order) => {
           return order.status === 'opened' && order.createdAt.getTime() > dateMS;
-        });
+        }) as OpenedOrder[];
       };
     },
     closedOrdersAfterDate(state: OrderStoreState) {
@@ -116,7 +118,7 @@ export const useOrderStore: OrderStoreDefinition = defineStore<
         const dateMS = date.getTime();
         return state.orders.filter((order) => {
           return order.status === 'closed' && order.createdAt.getTime() > dateMS;
-        });
+        }) as ClosedOrder[];
       };
     },
     getOrderWithID(state) {
