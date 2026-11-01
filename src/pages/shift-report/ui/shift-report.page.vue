@@ -3,15 +3,18 @@ import { useShiftStore } from '@/entities/shift';
 import type { Shift } from '@/shared/model/shift';
 import { AppBtn, CardMain, FlexCol } from '@/shared/ui';
 import FieldRow from '@/shared/ui/field.row.vue';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
 import { clearAllStores } from '../model';
 import { closeShift } from '@/feature/close-shift';
+import OrderListCompact from '@/entities/order/ui/order-list.compact.vue';
+import { useOrderStore } from '@/entities/order';
 
 const route = useRoute();
 let id = route.params.id;
 
 const shiftStore = useShiftStore();
+const orderStore = useOrderStore();;
 const shift = ref<Shift | undefined>();
 
 onMounted(async () => {
@@ -22,16 +25,45 @@ onMounted(async () => {
 });
 
 // @ts-ignore
-window.clearStore = () => {
-  clearAllStores();
-};
+window.clearAllStores = clearAllStores;
+
+const sort = ref<'createdAt' | 'closedAt' | 'finalTotal' | 'index'>('closedAt');
+
+const sortOptions = [
+  { value: 'createdAt', label: 'Дата создания' },
+  { value: 'closedAt', label: 'Дата закрытия' },
+  { value: 'finalTotal', label: 'Сумма заказа' },
+  { value: 'index', label: 'Номер заказа' },
+];
+
+const orderList = computed(() => {
+  if (!shift.value) return [];
+  return orderStore.closedOrdersAfterDate(shift.value.openedAt);
+});
+
+const sortedList = computed(() => {
+  switch (sort.value) {
+    case 'createdAt':
+      return [...orderList.value].sort((a, b) => (a.createdAt.getTime() - b.createdAt.getTime()));
+    case 'closedAt':
+      return [...orderList.value].sort((a, b) => (a.closedAt.getTime() - b.closedAt.getTime()));
+    case 'finalTotal':
+      return [...orderList.value].sort((a, b) => (a.totals.finalTotal - b.totals.finalTotal));
+    case 'index':
+      return [...orderList.value].sort((a, b) => (a.index - b.index));
+    default:
+      return [...orderList.value];
+  }
+});
 </script>
 
 <template>
-  <div class="flex justify-center">
+  <div class="flex justify-center gap-4 flex-wrap">
     <CardMain class="bg-white min-w-100 w-1/2">
       <template v-slot:prepend>
-        <h1 class="text-2xl font-bold text-center">Отчет</h1>
+        <h1 class="text-2xl font-bold text-center">
+          Отчет
+        </h1>
       </template>
 
       <FlexCol
@@ -54,7 +86,9 @@ window.clearStore = () => {
           :gap="2"
           class="bg-info p-2"
         >
-          <span class="text-white">Отчет по заказам:</span>
+          <span class="text-white">
+            Отчет по заказам:
+          </span>
           <div class="flex flex-col items-start">
             <FieldRow
               class="bg-transparent"
@@ -87,5 +121,26 @@ window.clearStore = () => {
         />
       </template>
     </CardMain>
+
+    <FlexCol :gap="4">
+      <div class="flex justify-between items-center gap-4">
+        <span class="text-white text-xl font-bold text-center">
+          Заказы
+        </span>
+        <select
+          v-model="sort"
+          class="text-white bg-info p-2 rounded-md"
+        >
+          <option
+            v-for="option in sortOptions"
+            :key="option.value"
+            :value="option.value"
+          >
+            {{ option.label }}
+          </option>
+        </select>
+      </div>
+      <OrderListCompact :list="sortedList" />
+    </FlexCol>
   </div>
 </template>

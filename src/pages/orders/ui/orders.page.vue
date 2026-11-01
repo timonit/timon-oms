@@ -28,7 +28,9 @@ const closedOrders = computed(() => {
         class="cursor-pointer"
       />
     </div>
+
     <hr class="border-white" />
+
     <span class="text-2xl font-bold text-white">Закрытые заказы</span>
     <div class="gap-2 grid">
       <OrderCard

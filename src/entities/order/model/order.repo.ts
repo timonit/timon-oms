@@ -10,6 +10,10 @@ export class OrderRepo extends Repo<Order> {
 
   async getOrders(): Promise<Order[]> {
     const orders = await this.getStorage();
-    return orders.map((order) => ({ ...order, createdAt: new Date(order.createdAt) }));
+    return orders.map((order) => ({
+      ...order,
+      createdAt: new Date(order.createdAt),
+      closedAt: order.closedAt ? new Date(order.closedAt) : undefined,
+    }));
   }
 }
