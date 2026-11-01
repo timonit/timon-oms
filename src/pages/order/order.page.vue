@@ -61,27 +61,29 @@ watch(
 </script>
 
 <template>
-  <div class="flex gap-4 items-center mb-2">
-    <AppBtn
-      text="Открыть заказ"
-      @click="addOrder"
-    />
+  <div>
+    <div class="flex gap-4 items-center mb-2">
+      <AppBtn
+        text="Открыть заказ"
+        @click="addOrder"
+      />
 
-    <span v-if="status">{{ status }}</span>
-  </div>
-
-  <div
-    v-if="order"
-    class="flex gap-4 flex-col lg:flex-row"
-  >
-    <div class="grow-0 shrink-0 lg:w-4/7">
-      <OrderControlCard v-model="order" />
+      <span v-if="status">{{ status }}</span>
     </div>
 
-    <ProductsGrid
-      :products="productStore.products"
-      class="grow shrink"
-      @pick="pickProducts"
-    />
+    <div
+      v-if="order"
+      class="flex gap-4 flex-col lg:flex-row"
+    >
+      <div class="grow-0 shrink-0 lg:w-4/7">
+        <OrderControlCard v-model="order" />
+      </div>
+
+      <ProductsGrid
+        :products="productStore.products"
+        class="grow shrink"
+        @pick="pickProducts"
+      />
+    </div>
   </div>
 </template>
