@@ -8,14 +8,14 @@ import NavLink from './nav.link.vue';
       <slot name="left-side" />
     </div>
 
-    <nav class="flex items-center gap-4">
+    <nav class="flex flex-wrap items-center gap-4">
       <NavLink
         :to="{ name: 'Order' }"
-        title="Заказ"
+        title="Главная"
       />
       <NavLink
         :to="{ name: 'Orders' }"
-        title="Заказы"
+        title="Все заказы"
       />
       <NavLink
         :to="{ name: 'ProductsManager' }"
