@@ -19,6 +19,15 @@ const types = computed(() => {
 });
 
 const { state: showModifSelect, toggle } = useToggler();
+
+const addItem = (modif: string) => {
+  if (product.value.availableModifications.includes(modif)) {
+    product.value.availableModifications = product.value.availableModifications.filter((m) => m !== modif);
+  }
+  else {
+    product.value.availableModifications = [...product.value.availableModifications, modif];
+  }
+};
 </script>
 
 <template>
@@ -68,22 +77,22 @@ const { state: showModifSelect, toggle } = useToggler();
           class="mb-4"
         />
 
-        <select
+        <FlexCol
           v-if="showModifSelect"
-          v-model="product.availableModifications"
-          placeholder="модификаторы"
-          multiple
+          :gap="1"
           class="bg-white"
         >
-          <option
+          <div
             v-for="modif in modificationStore.modifications"
             :key="modif.id"
             :value="modif.name"
-            class="p-2"
+            class="p-2 cursor-pointer"
+            :class="{ 'bg-secondary/50 text-white': product.availableModifications.includes(modif.name) }"
+            @click.prevent="addItem(modif.name)"
           >
             {{ modif.name }}
-          </option>
-        </select>
+          </div>
+        </FlexCol>
 
         <ul
           v-else
