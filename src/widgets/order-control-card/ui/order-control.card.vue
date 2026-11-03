@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AppBtn, AppConfirmation, CardMain } from '@/shared/ui';
+import { AppAlert, AppBtn, AppConfirmation, CardMain } from '@/shared/ui';
 import { ORDER_STATUS, type Order, type OrderPosition } from '@/shared/model/order';
 import OrderPositionRow from './order-position.row.vue';
 import { FlexCol } from '@/shared/ui';
@@ -90,13 +90,28 @@ const cancel = async () => {
       </CloseOrderCard>
     </AppModal>
 
-    <AppConfirmation
-      v-model="isShowCancelConfirmation"
-      ok-btn-text="Отменить заказ"
-      title="Вы уверены что хотите отменить заказ ?"
-      @ok="cancel"
-      close-after-ok
-    />
+    <AppModal v-model="isShowCancelConfirmation">
+      <AppAlert class="bg-error">
+        <FlexCol :gap="8">
+          <span class="text-wrap text-lg text-white">
+            Вы уверены что хотите отменить заказ ?
+          </span>
+
+          <div class="flex justify-between gap-4">
+            <AppBtn
+              class="self-end bg-secondary text-white"
+              text="Скрыть"
+              @click="hideCancelConfirmation"
+            />
+            <AppBtn
+              class="self-end bg-warning text-white"
+              text="Отменить заказ"
+              @click="cancel"
+            />
+          </div>
+        </FlexCol>
+      </AppAlert>
+    </AppModal>
 
     <template
       v-if="order.status !== ORDER_STATUS.closed"
