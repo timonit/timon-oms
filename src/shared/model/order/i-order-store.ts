@@ -14,6 +14,7 @@ export interface OrderStoreGetters extends _GettersTree<OrderStoreState> {
   openedOrdersAfterDate(state: OrderStoreState): (date: Date) => OpenedOrder[];
   closedOrdersAfterDate(state: OrderStoreState): (date: Date) => ClosedOrder[];
   getOrderWithID(state: OrderStoreState): (id: string) => Order | undefined;
+  getOrdersWithID(state: OrderStoreState): (ids: string[]) => Order[];
 }
 
 export interface OrderStoreActions {

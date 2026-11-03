@@ -44,4 +44,8 @@ export class OrderEntity extends Entity<Order> {
     this.data.closedAt = new Date();
     this.data.payment = paymentData;
   }
+
+  cancel() {
+    this.data.status = ORDER_STATUS.canceled;
+  }
 }

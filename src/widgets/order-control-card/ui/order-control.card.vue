@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { AppBtn, CardMain } from '@/shared/ui';
+import { AppBtn, AppConfirmation, CardMain } from '@/shared/ui';
 import { ORDER_STATUS, type Order, type OrderPosition } from '@/shared/model/order';
 import OrderPositionRow from './order-position.row.vue';
 import { FlexCol } from '@/shared/ui';
@@ -11,10 +11,16 @@ import { ORDER_CONTROL_CARD_SERVICE_INJECT_KEY, OrderControlCardService } from '
 import { useToggler } from '@/shared/composables';
 import AppModal from '@/shared/ui/app-modal.vue';
 import PaymentPanel from './payment.panel.vue';
+import { cancelOrder } from '@/feature/cancel-order/index.ts';
 
 const order = defineModel<Order>({ required: true });
 const router = useRouter();
 const { state, enable, disable } = useToggler();
+const {
+  state: isShowCancelConfirmation,
+  enable: showCancelConfirmation,
+  disable: hideCancelConfirmation,
+} = useToggler();
 const orderControlCardService = new OrderControlCardService(order);
 provide(ORDER_CONTROL_CARD_SERVICE_INJECT_KEY, orderControlCardService);
 
@@ -24,6 +30,11 @@ const removePosition = (position: OrderPosition, index: number) => {
 
 const goToNewOrder = async () => {
   router.push({ name: 'Order' });
+};
+
+const cancel = async () => {
+  await cancelOrder(order.value);
+  goToNewOrder();
 };
 </script>
 
@@ -79,12 +90,27 @@ const goToNewOrder = async () => {
       </CloseOrderCard>
     </AppModal>
 
-    <template v-slot:action>
+    <AppConfirmation
+      v-model="isShowCancelConfirmation"
+      ok-btn-text="Отменить заказ"
+      title="Вы уверены что хотите отменить заказ ?"
+      @ok="cancel"
+      close-after-ok
+    />
+
+    <template
+      v-if="order.status !== ORDER_STATUS.closed"
+      v-slot:action
+    >
       <AppBtn
-        v-if="order.status !== ORDER_STATUS.closed"
         text="Закрыть заказ"
         color="warning"
         @click="enable"
+      />
+      <AppBtn
+        text="Отменить заказ"
+        color="error"
+        @click="showCancelConfirmation"
       />
     </template>
   </CardMain>

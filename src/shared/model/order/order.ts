@@ -4,6 +4,7 @@ import type { OrderPosition } from './order-position';
 export enum ORDER_STATUS {
   opened = 'opened',
   closed = 'closed',
+  canceled = 'canceled',
 }
 
 export type Order = {
