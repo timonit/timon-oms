@@ -124,5 +124,8 @@ export const useOrderStore: OrderStoreDefinition = defineStore<
     getOrderWithID(state) {
       return (id: string) => state.orders.find((order) => order.id === id);
     },
+    getOrdersWithID(state) {
+      return (ids: string[]) => state.orders.filter((order) => ids.includes(order.id));
+    },
   },
 });

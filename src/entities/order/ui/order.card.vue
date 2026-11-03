@@ -3,9 +3,9 @@ import { AppModal, CardMain } from '@/shared/ui';
 import type { Order } from '@/shared/model/order';
 import OrderCardField from './order.card-field.vue';
 import { useToggler } from '@/shared/composables';
-import { removeOrder } from '@/feature/remove-order';
 import AppBtn from '@/shared/ui/app-btn.vue';
 import { useRouter } from 'vue-router';
+import { cancelOrder } from '@/feature/cancel-order';
 
 type OrderCardProps = {
   order: Order;
@@ -72,7 +72,7 @@ const payTitle = {
         @click.stop="moveToOrder"
       />
       <AppBtn
-        text="Удалить"
+        text="Отменить"
         color="error"
         @click.stop="enable"
       />
@@ -81,18 +81,14 @@ const payTitle = {
     <AppModal v-model="state">
       <CardMain class="bg-error text-white w-75 shadow-xl">
         <span>
-          Уверены что хотите удалить заказ #{{ order.index }}
+          Уверены что хотите отменить заказ #{{ order.index }}
         </span>
 
         <template v-slot:action>
           <div class="flex gap-2 justify-between w-full">
             <AppBtn
-              text="Отмена"
-              @click="disable"
-            />
-            <AppBtn
-              text="Удалить"
-              @click="removeOrder(props.order.id)"
+              text="Отменить"
+              @click="cancelOrder(props.order)"
             />
           </div>
         </template>

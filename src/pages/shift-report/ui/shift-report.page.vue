@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useShiftStore } from '@/entities/shift';
 import type { Shift } from '@/shared/model/shift';
-import { AppBtn, CardMain, FlexCol } from '@/shared/ui';
+import { AppAlert, AppBtn, AppConfirmation, CardMain, FlexCol } from '@/shared/ui';
 import FieldRow from '@/shared/ui/field.row.vue';
 import { computed, onMounted, ref, watchEffect } from 'vue';
 import { useRoute } from 'vue-router';
@@ -9,6 +9,7 @@ import { clearAllStores } from '../model';
 import { closeShift } from '@/feature/close-shift';
 import OrderListCompact from '@/entities/order/ui/order-list.compact.vue';
 import { useOrderStore } from '@/entities/order';
+import { useToggler } from '@/shared/composables';
 
 const route = useRoute();
 let id = route.params.id;
@@ -55,6 +56,32 @@ const sortedList = computed(() => {
       return [...orderList.value];
   }
 });
+
+const {
+  state: hasOpenedOrdersModal,
+  enable: showOpenedOrdersModal,
+  disable: hideOpenedOrdersModal,
+} = useToggler();
+
+const {
+  state: isShowConfirmCloseShift,
+  enable: showConfirmCloseModal,
+  disable: hideConfirmCloseModal,
+} = useToggler();
+
+const error = ref();
+
+const closeShiftHandler = async () => {
+  try {
+    await closeShift();
+  } catch (err) {
+    if (err instanceof Error) {
+      error.value = err.message;
+      showOpenedOrdersModal();
+    }
+    else throw err;
+  }
+};
 </script>
 
 <template>
@@ -65,6 +92,17 @@ const sortedList = computed(() => {
           Отчет
         </h1>
       </template>
+
+      <AppConfirmation
+        v-model="hasOpenedOrdersModal"
+        okBtnText="Скрыть"
+        closeAfterOk
+      >
+        <AppAlert
+          :content="error"
+          class="bg-error text-white mb-4"
+        />
+      </AppConfirmation>
 
       <FlexCol
         v-if="shift"
@@ -117,7 +155,17 @@ const sortedList = computed(() => {
         <AppBtn
           v-if="shiftStore.shift"
           text="Закрыть смену"
-          @click="closeShift"
+          @click="showConfirmCloseModal"
+        />
+        <AppConfirmation
+          v-model="isShowConfirmCloseShift"
+          title="Закрытие смены"
+          content="Вы уверены что хотите закрыть смену"
+          okBtnText="Закрыть смену"
+          @ok="closeShiftHandler"
+          showCancelBtn
+          closeAfterCancel
+          closeAfterOk
         />
       </template>
     </CardMain>

@@ -1,3 +1,4 @@
+import AppAlert from './app-alert.vue';
 import AppBtn from './app-btn.vue';
 import AppCollapse from './app-collapse.vue';
 import AppConfirmation from './app-confirmation.vue';
@@ -18,4 +19,5 @@ export {
   AppModal,
   AppDropdown,
   AppConfirmation,
+  AppAlert,
 };
