@@ -12,6 +12,7 @@ export class ModificationListService {
 
   modifications = ref<Modification[]>([]);
   selected: Ref<string[]>;
+  showAllModifications = ref(true);
 
   constructor(product: Product, selected: Ref<string[]>) {
     const modificationStore = useModificationStore();
@@ -20,13 +21,17 @@ export class ModificationListService {
     this.selected = selected;
 
     watch(
-      () => [this.mode.value, this.product.availableModifications],
+      () => [this.mode.value, this.product.availableModifications, this.showAllModifications.value],
       () => {
         if (product) {
           if (this.mode.value === 'pick') {
-            this.modifications.value = modificationStore.getModificationsByName(
-              product.availableModifications,
-            );
+            if (this.showAllModifications.value) {
+              this.modifications.value = modificationStore.modifications;
+            } else {
+              this.modifications.value = modificationStore.getModificationsByName(
+                product.availableModifications,
+              );
+            }
           }
           if (this.mode.value === 'delete') {
             this.modifications.value = modificationStore.getModificationsByName(

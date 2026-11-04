@@ -2,7 +2,7 @@
 import { useModificationStore } from '@/entities/modification';
 import { useProductStore } from '@/entities/product';
 import { AppBtn, CardMain, FlexCol } from '@/shared/ui';
-import { FormField } from '@/shared/ui/form';
+import { FormCheckbox, FormField } from '@/shared/ui/form';
 import { computed, provide, reactive } from 'vue';
 import { MODIFICATION_LIST_KEY, ModificationListService } from './modification.list-service';
 import ModificationListItem from './modification.list-item.vue';
@@ -53,6 +53,10 @@ const title = computed(() => {
     default: return '';
   }
 });
+
+const toggleShowAllModif = () => {
+  modificationListService.showAllModifications.value = !modificationListService.showAllModifications.value;
+};
 </script>
 
 <template>
@@ -70,7 +74,14 @@ const title = computed(() => {
     </template>
 
     <FlexCol :gap="8">
-      <span class="text-center text-lg font-bold">{{ title }}</span>
+      <span class="text-center text-lg font-bold">
+        {{ title }}
+      </span>
+      <AppBtn
+        :text="!modificationListService.showAllModifications.value ? 'Показать все модификаторы' : 'Связаные модификаторы'"
+        color="info"
+        @click="toggleShowAllModif"
+      />
       <FlexCol>
         <FlexCol
           v-if="modificationListService.mode.value !== 'add'"
