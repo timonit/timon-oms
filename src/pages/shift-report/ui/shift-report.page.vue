@@ -10,12 +10,14 @@ import { closeShift } from '@/feature/close-shift';
 import OrderListCompact from '@/entities/order/ui/order-list.compact.vue';
 import { useOrderStore } from '@/entities/order';
 import { useToggler } from '@/shared/composables';
+import { useNotification } from '@/shared/ui/nofications/use-notification';
 
 const route = useRoute();
 let id = route.params.id;
 
 const shiftStore = useShiftStore();
-const orderStore = useOrderStore();;
+const orderStore = useOrderStore();
+const notification = useNotification();
 const shift = ref<Shift | undefined>();
 
 onMounted(async () => {
@@ -74,6 +76,7 @@ const error = ref();
 const closeShiftHandler = async () => {
   try {
     await closeShift();
+    notification.notifySuccess('Смена закрыта');
   } catch (err) {
     if (err instanceof Error) {
       error.value = err.message;

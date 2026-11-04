@@ -19,15 +19,18 @@ const toggle = () => {
     </slot>
 
     <div
-      class="h-5 w-5 rounded-full bg-white flex items-center justify-center border"
+      class="h-5 w-5 rounded-full bg-white flex items-center justify-center border-2"
       :class="{
         'border-success': model,
-        'border-surface': !model
+        'border-surface/50': !model
       }"
     >
       <div
-        v-show="model"
-        class="h-3 w-3 rounded-full bg-success"
+        class="h-3 w-3 rounded-full "
+        :class="{
+          'bg-success': model,
+          'bg-surface/20': !model,
+        }"
       ></div>
     </div>
     <input

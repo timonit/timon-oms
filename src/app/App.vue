@@ -5,6 +5,7 @@ import { useProductStore } from '@/entities/product';
 import { useShiftStore } from '@/entities/shift';
 import { AppStatus, isStatus, LoadingStatus, NostartedStatus, OMSApp, StartedStatus } from '@/shared/app';
 import { APP_INJECT_KEY } from '@/shared/app/app.inject-key';
+import { Notifications } from '@/shared/ui';
 import { DefaultLayout } from '@/shared/ui/layouts';
 import { AppSystembar } from '@/shared/ui/systembar';
 import { ShiftPanel } from '@/widgets/shift-panel';
@@ -60,4 +61,6 @@ provide(APP_INJECT_KEY, app);
       />
     </router-view>
   </DefaultLayout>
+
+  <Notifications class="fixed bottom-0 left-0 right-0" />
 </template>

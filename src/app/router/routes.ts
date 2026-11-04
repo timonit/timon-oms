@@ -3,6 +3,7 @@ import { OpenShiftPage } from '@/pages/open-shift';
 import { OrderPage } from '@/pages/order';
 import { OrdersPage } from '@/pages/orders';
 import { ProductsManagerPage } from '@/pages/products-manager';
+import { SettingsPage } from '@/pages/settings';
 import { ShiftReportPage } from '@/pages/shift-report';
 import type { RouteRecordRaw } from 'vue-router';
 
@@ -41,5 +42,10 @@ export const routes: RouteRecordRaw[] = [
     path: '/modifications',
     component: ModificationsPage,
     name: 'Modifications',
+  },
+  {
+    path: '/settings',
+    component: SettingsPage,
+    name: 'Settings',
   },
 ];
