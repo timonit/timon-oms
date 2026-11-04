@@ -4,9 +4,11 @@ import { CreateProductForm } from '@/feature/create-product';
 import { useToggler } from '@/shared/composables';
 import type { Product } from '@/shared/model/product';
 import { AppBtn, AppCollapse, AppModal, AppToolbar, FlexCol } from '@/shared/ui';
+import { useNotification } from '@/shared/ui/nofications/use-notification';
 import { computed, onMounted, ref } from 'vue';
 
 const productStore = useProductStore();
+const notification = useNotification();
 const { state: showCreateForm, enable: showForm, disable: hideForm } = useToggler();
 const products = ref<Product[]>(productStore.products.reverse().map((prod) => ({ ...prod })));
 
@@ -33,7 +35,10 @@ productStore.$subscribe((mutation, state) => {
 const toolbarActions = [
   {
     text: 'save',
-    handler: () => productStore.setProducts(products.value),
+    handler: async () => {
+      await productStore.setProducts(products.value);
+      notification.notifySuccess("Продукты успешно сохранены");
+    },
   },
   {
     text: 'Добавить',

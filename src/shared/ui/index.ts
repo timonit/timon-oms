@@ -9,6 +9,8 @@ import CardMain from './card.main.vue';
 import CardMini from './card.mini.vue';
 import FlexCol from './flex.col.vue';
 
+export * from './nofications';
+
 export {
   CardMain,
   CardMini,

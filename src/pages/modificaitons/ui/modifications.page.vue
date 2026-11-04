@@ -3,14 +3,17 @@ import { useModificationStore } from '@/entities/modification';
 import ModificationCard from './modification.card.vue';
 import { AppCollapse, AppToolbar, FlexCol } from '@/shared/ui';
 import ModificationForm from './modification.form.vue';
+import { useNotification } from '@/shared/ui/nofications/use-notification.ts';
 
 const modificationStore = useModificationStore();
+const notification = useNotification();
 
 const actions = [
   {
     text: 'save',
-    handler: () => {
-      modificationStore.setModifications(modificationStore.modifications);
+    handler: async () => {
+      await modificationStore.setModifications(modificationStore.modifications);
+      notification.notifySuccess('Модификаторы успешно сохранены');
     },
   }
 ];

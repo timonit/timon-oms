@@ -2,6 +2,7 @@ import { type Modification } from '@/shared/model/modification';
 import { useModificationStore } from '@/entities/modification';
 import type { Product } from '@/shared/model/product';
 import { ref, watch, type InjectionKey, type Ref } from 'vue';
+import { useSettingsStore } from '@/shared/model/settings';
 
 export type ModificationListMode = 'add' | 'delete' | 'pick' | 'attach';
 
@@ -12,21 +13,29 @@ export class ModificationListService {
 
   modifications = ref<Modification[]>([]);
   selected: Ref<string[]>;
+  showAllModifications = ref(true);
 
   constructor(product: Product, selected: Ref<string[]>) {
     const modificationStore = useModificationStore();
+    const settingsStore = useSettingsStore();
+
+    this.showAllModifications.value = settingsStore.modifications.showPickModeAllModifications;
 
     this.product = product;
     this.selected = selected;
 
     watch(
-      () => [this.mode.value, this.product.availableModifications],
+      () => [this.mode.value, this.product.availableModifications, this.showAllModifications.value],
       () => {
         if (product) {
           if (this.mode.value === 'pick') {
-            this.modifications.value = modificationStore.getModificationsByName(
-              product.availableModifications,
-            );
+            if (this.showAllModifications.value) {
+              this.modifications.value = modificationStore.modifications;
+            } else {
+              this.modifications.value = modificationStore.getModificationsByName(
+                product.availableModifications,
+              );
+            }
           }
           if (this.mode.value === 'delete') {
             this.modifications.value = modificationStore.getModificationsByName(
