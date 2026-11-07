@@ -11,12 +11,14 @@ import OrderListCompact from '@/entities/order/ui/order-list.compact.vue';
 import { useOrderStore } from '@/entities/order';
 import { useToggler } from '@/shared/composables';
 import { useNotification } from '@/shared/ui/nofications/use-notification';
+import { useProductStore, ProductStockInfo } from '@/entities/product';
 
 const route = useRoute();
 let id = route.params.id;
 
 const shiftStore = useShiftStore();
 const orderStore = useOrderStore();
+const productStore = useProductStore();
 const notification = useNotification();
 const shift = ref<Shift | undefined>();
 
@@ -142,6 +144,33 @@ const closeShiftHandler = async () => {
               :fieldValue="shift.report.orders.length"
             />
           </div>
+        </FlexCol>
+        <FlexCol
+          :gap="2"
+          class="bg-info p-2"
+        >
+          <span class="text-white">
+            Остатки товаров:
+          </span>
+          <div
+            v-if="productStore.products.some((product) => product.stock !== undefined)"
+            class="flex flex-col items-start"
+          >
+            <div
+              v-for="product in productStore.products.filter((item) => item.stock !== undefined)"
+              :key="product.id"
+              class="flex justify-between gap-4 w-full bg-transparent"
+            >
+              <span class="text-white">{{ product.name }}</span>
+              <ProductStockInfo :quantity="product.stock" />
+            </div>
+          </div>
+          <span
+            v-else
+            class="text-white"
+          >
+            Остатки не заданы
+          </span>
         </FlexCol>
         <FieldRow
           fieldName="Открыл смену"

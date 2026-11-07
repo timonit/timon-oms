@@ -15,6 +15,7 @@ const product: CreateProductDTO = reactive({
   name: '',
   price: 0,
   type: '',
+  stock: undefined,
   ean: undefined,
 });
 
@@ -26,6 +27,7 @@ const add = async () => {
     product.name = '';
     product.price = 0;
     product.type = '';
+    product.stock = undefined;
     product.ean = '';
 
     nameFieldEl.value?.$el.focus();
@@ -78,6 +80,15 @@ const types = computed(() => {
             name="price"
             v-model="product.price"
             placeholder="Цена"
+            type="number"
+          />
+        </div>
+        <div class="flex flex-col">
+          <span class="text-white">Остаток</span>
+          <FormField
+            name="stock"
+            v-model="product.stock"
+            placeholder="Количество на складе"
             type="number"
           />
         </div>

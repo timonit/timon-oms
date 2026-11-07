@@ -1,6 +1,7 @@
 import { OrderEntity, useOrderStore } from '@/entities/order';
+import { useProductStore } from '@/entities/product';
 import { useShiftStore } from '@/entities/shift';
-import type { Order, OrderPayment } from '@/shared/model/order';
+import { ORDER_STATUS, type Order, type OrderPayment } from '@/shared/model/order';
 import type { Payment } from '@/shared/model/payment';
 
 export type CloseOrderPaymentDataDTO = {
@@ -15,7 +16,11 @@ export type CloseOrderDTO = {
 
 export async function closeOrder({ order, paymentData }: CloseOrderDTO): Promise<Order> {
   const orderStore = useOrderStore();
+  const productStore = useProductStore();
   const shiftStore = useShiftStore();
+  if (orderStore.getOrderWithID(order.id)?.status !== ORDER_STATUS.opened) {
+    throw new Error('Order is not open');
+  }
 
   const orderEnt = new OrderEntity(order);
   const payment: OrderPayment = {
@@ -28,6 +33,24 @@ export async function closeOrder({ order, paymentData }: CloseOrderDTO): Promise
   orderEnt.close(payment);
 
   const updatedOrder = await orderStore.change(orderEnt.data);
+
+  const orderedQuantities = new Map<string, number>();
+  order.positions.forEach((position) => {
+    orderedQuantities.set(
+      position.name,
+      (orderedQuantities.get(position.name) ?? 0) + position.quantity,
+    );
+  });
+
+  const updatedProducts = productStore.products.map((product) => {
+    if (product.stock === undefined) return product;
+
+    const quantity = orderedQuantities.get(product.name);
+    if (quantity === undefined) return product;
+
+    return { ...product, stock: product.stock - quantity };
+  });
+  await productStore.setProducts(updatedProducts);
 
   let profit = 0;
   let orders: Order[] = [];

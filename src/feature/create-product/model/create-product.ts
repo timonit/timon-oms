@@ -5,6 +5,7 @@ export type CreateProductDTO = {
   name: string;
   price: number;
   type: string;
+  stock?: number;
   ean?: string;
 };
 

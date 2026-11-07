@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { Product } from '@/shared/model/product';
 import CardMini from '@/shared/ui/card.mini.vue';
+import ProductStockInfo from './product-stock-info.vue';
 
 type ProductProps = {
   product: Product;
@@ -24,6 +25,11 @@ const props = defineProps<ProductProps>();
     <span class="text-xl font-bold text-center leading-6 uppercase wrap-anywhere">
       {{ product.name }}
     </span>
+
+    <ProductStockInfo
+      :quantity="product.stock"
+      class="text-center"
+    />
 
     <template v-slot:append>
       <span class="text-xl font-bold text-center text-red-700 wrap-anywhere">
