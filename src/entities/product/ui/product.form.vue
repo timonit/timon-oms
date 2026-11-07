@@ -54,6 +54,13 @@ const addItem = (modif: string) => {
         placeholder="price"
         type="number"
       />
+      <FormField
+        label="Остаток"
+        name="stock"
+        v-model="product.stock"
+        placeholder="Количество на складе"
+        type="number"
+      />
       <FormFieldAutocomplete
         :id="product.name"
         label="Тип"

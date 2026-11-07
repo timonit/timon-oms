@@ -84,9 +84,11 @@ export const useOrderStore: OrderStoreDefinition = defineStore<
 
       const oldOrder = this.orders[orderIndex];
       const newOrder = { ...oldOrder, ...partialOrder } as Order;
+      const newOrders = [...this.orders];
+      newOrders[orderIndex] = newOrder;
 
-      this.orders[orderIndex] = newOrder;
-      orderRepo.setOrders(this.orders);
+      await orderRepo.setOrders(newOrders);
+      this.orders = newOrders;
 
       return newOrder;
     },

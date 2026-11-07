@@ -7,13 +7,29 @@ import { ModificationChip } from '@/entities/modification';
 import { calculatePositionTotalPrice } from '@/entities/order';
 import { inject } from 'vue';
 import { ORDER_CONTROL_CARD_SERVICE_INJECT_KEY } from '../model';
-import App from '@/app/App.vue';
 import PositionAddCommentCard from './position-add-comment.card.vue';
+import { computed } from 'vue';
+import { useProductStore } from '@/entities/product';
+import { ProductStockInfo } from '@/entities/product';
 
 const emit = defineEmits<{ (e: 'remove'): void; }>();
 const props = defineProps<{ position: OrderPosition; }>();
 const orderControlCardService = inject(ORDER_CONTROL_CARD_SERVICE_INJECT_KEY);
 if (!orderControlCardService) throw new Error('orderControlCardService not found');
+const productStore = useProductStore();
+
+const remainingStock = computed(() => {
+  const product = productStore.getProductByName(props.position.name);
+  if (product?.stock === undefined) return undefined;
+
+  const orderedQuantity = orderControlCardService.order.value.positions
+    .filter((position) => position.name === props.position.name)
+    .reduce((total, position) => total + position.quantity, 0);
+
+  return product.stock - orderedQuantity;
+});
+
+const isStockExceeded = computed(() => remainingStock.value !== undefined && remainingStock.value < 0);
 
 const increment = () => {
   const updatedPosition = {
@@ -60,6 +76,13 @@ const changePosition = (position: OrderPosition) => {
       <div class="shrink-0 w-1/5">
         {{ position.name }}
       </div>
+
+      <ProductStockInfo
+        v-if="isStockExceeded"
+        :quantity="remainingStock"
+        label="Остаток после заказа"
+        warning
+      />
 
       <div class="grow-0 shrink-0 flex gap-2">
         <AppBtn
