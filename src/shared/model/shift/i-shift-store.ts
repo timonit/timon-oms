@@ -2,6 +2,7 @@ import { type _GettersTree, type Store, type StoreDefinition } from 'pinia';
 import type { Shift, ShiftReport } from './shift';
 
 export type ShiftStoreState = {
+  shifts: Shift[];
   shift?: Shift;
 };
 

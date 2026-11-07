@@ -14,12 +14,15 @@ export const useShiftStore: ShiftStoreDefinition = defineStore<
   ShiftStoreGetters,
   ShiftStoreActions
 >('shift', {
-  state: () => ({}),
+  state: () => ({
+    shifts: [],
+  }),
 
   actions: {
     async fetch() {
       const shiftRepo = new ShiftRepo();
       const shifts = await shiftRepo.getShifts();
+      this.shifts = shifts;
       const openedShifts = shifts.filter((shift) => shift.status === 'opened');
 
       if (openedShifts.length) {
@@ -42,6 +45,7 @@ export const useShiftStore: ShiftStoreDefinition = defineStore<
       const shiftRepo = new ShiftRepo();
       await shiftRepo.setShifts(shifts);
 
+      this.shifts = shifts;
       this.shift = openedShifts[0];
     },
 
@@ -51,6 +55,7 @@ export const useShiftStore: ShiftStoreDefinition = defineStore<
       const newShifts = [...oldShifts, shift];
 
       await shiftRepo.setShifts(newShifts);
+      this.shifts = newShifts;
       this.shift = shift;
 
       return this.shift;
@@ -69,6 +74,7 @@ export const useShiftStore: ShiftStoreDefinition = defineStore<
 
       await shiftRepo.setShifts(shifts);
 
+      this.shifts = shifts;
       this.shift = undefined;
     },
 
@@ -83,6 +89,7 @@ export const useShiftStore: ShiftStoreDefinition = defineStore<
       shifts[shiftIndex] = newShift;
 
       await shiftRepo.setShifts(shifts);
+      this.shifts = shifts;
       this.shift = newShift;
 
       return this.shift;
