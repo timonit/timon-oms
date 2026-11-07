@@ -19,6 +19,7 @@ export interface OrderStoreGetters extends _GettersTree<OrderStoreState> {
 
 export interface OrderStoreActions {
   fetch(): Promise<void>;
+  setOrders(orders: Order[]): Promise<void>;
   add(order: Order): Promise<void>;
   delete(id: string): Promise<void>;
   change(partialOrder: Omit<Partial<Order>, 'createdAt' | 'id'> & { id: string }): Promise<Order>;
