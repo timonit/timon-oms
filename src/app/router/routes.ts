@@ -4,6 +4,7 @@ import { OrderPage } from '@/pages/order';
 import { OrdersPage } from '@/pages/orders';
 import { ProductsManagerPage } from '@/pages/products-manager';
 import { SettingsPage } from '@/pages/settings';
+import { StatisticsPage } from '@/pages/statistics';
 import { ShiftReportPage } from '@/pages/shift-report';
 import type { RouteRecordRaw } from 'vue-router';
 
@@ -47,5 +48,10 @@ export const routes: RouteRecordRaw[] = [
     path: '/settings',
     component: SettingsPage,
     name: 'Settings',
+  },
+  {
+    path: '/statistics',
+    component: StatisticsPage,
+    name: 'Statistics',
   },
 ];

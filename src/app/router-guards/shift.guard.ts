@@ -14,7 +14,12 @@ export async function shiftGuard(to: RouteLocationNormalizedGeneric) {
     });
   }
 
-  if (shiftStore.isOpenedShift || to.name === 'OpenShift' || to.name === 'ShiftReport') {
+  if (
+    shiftStore.isOpenedShift ||
+    to.name === 'OpenShift' ||
+    to.name === 'ShiftReport' ||
+    to.name === 'Statistics'
+  ) {
     return true;
   }
 
