@@ -17,6 +17,7 @@ const props = defineProps<NavLinkProps>();
   >
     <AppBtn
       :text="props.title"
+      class="w-full"
       :class="{
         'bg-info': !isActive,
         'bg-success': isActive
