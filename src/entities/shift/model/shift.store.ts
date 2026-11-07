@@ -25,13 +25,24 @@ export const useShiftStore: ShiftStoreDefinition = defineStore<
       if (openedShifts.length) {
         if (openedShifts.length > 1) {
           shifts.forEach((shift) => (shift.status = 'closed'));
-          shiftRepo.setShifts(shifts);
+          await shiftRepo.setShifts(shifts);
 
           throw new Error('Opened shifts more then 1');
         }
 
         this.shift = openedShifts[0];
       }
+      else this.shift = undefined;
+    },
+
+    async setShifts(shifts: Shift[]) {
+      const openedShifts = shifts.filter((shift) => shift.status === 'opened');
+      if (openedShifts.length > 1) throw new Error('Opened shifts more then 1');
+
+      const shiftRepo = new ShiftRepo();
+      await shiftRepo.setShifts(shifts);
+
+      this.shift = openedShifts[0];
     },
 
     async addShift(shift) {

@@ -2,7 +2,7 @@
 import { useModificationStore } from '@/entities/modification';
 import { useProductStore } from '@/entities/product';
 import { AppBtn, CardMain, FlexCol } from '@/shared/ui';
-import { FormCheckbox, FormField } from '@/shared/ui/form';
+import { FormField } from '@/shared/ui/form';
 import { computed, provide, reactive } from 'vue';
 import { MODIFICATION_LIST_KEY, ModificationListService } from './modification.list-service';
 import ModificationListItem from './modification.list-item.vue';
@@ -21,10 +21,18 @@ const selected = defineModel<string[]>({ required: true });
 
 const productStore = useProductStore();
 const modificationStore = useModificationStore();
-const product = productStore.getProductByName(props.position.name);
-if (!product) throw new Error('Product not found');
+const catalogProduct = productStore.getProductByName(props.position.name);
+const product = catalogProduct ?? {
+  id: '',
+  name: props.position.name,
+  type: props.position.type,
+  price: props.position.price,
+  availableModifications: [],
+};
+const productIsInCatalog = catalogProduct !== undefined;
 
 const modificationListService = new ModificationListService(product, selected);
+if (!productIsInCatalog) modificationListService.showAllModifications.value = true;
 provide(MODIFICATION_LIST_KEY, modificationListService);
 
 const modificationForm = reactive({
@@ -78,6 +86,7 @@ const toggleShowAllModif = () => {
         {{ title }}
       </span>
       <AppBtn
+        v-if="productIsInCatalog"
         :text="!modificationListService.showAllModifications.value ? 'Показать все модификаторы' : 'Связаные модификаторы'"
         color="info"
         @click="toggleShowAllModif"
@@ -121,7 +130,7 @@ const toggleShowAllModif = () => {
     <template v-slot:action>
 
       <div class="flex gap-2">
-        <template v-if="!props.onlyPick">
+        <template v-if="!props.onlyPick && productIsInCatalog">
           <AppBtn
             text="Режим выбора"
             @click="modificationListService.mode.value = 'pick'"

@@ -14,6 +14,7 @@ export interface ShiftStoreGetters extends _GettersTree<ShiftStoreState> {
 
 export interface ShiftStoreActions {
   fetch(): Promise<void>;
+  setShifts(shifts: Shift[]): Promise<void>;
   addShift(shift: Shift): Promise<Shift>;
   closeShift(shift: Shift): Promise<void>;
   changeShift(

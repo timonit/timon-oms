@@ -10,6 +10,23 @@ import type {
   OpenedOrder,
 } from '@/shared/model/order';
 
+function normalizeOrders(orders: Order[]): Order[] {
+  return orders.map((order) => ({
+    ...order,
+    positions: order.positions.map((position, index) => ({
+      ...position,
+      index: position.index ?? index,
+      modifications: position.modifications ?? [],
+    })),
+    totals: order.totals ?? {
+      subTotal: 0,
+      deliveryFee: 0,
+      discountAmount: 0,
+      finalTotal: 0,
+    },
+  }));
+}
+
 export const useOrderStore: OrderStoreDefinition = defineStore<
   'orders',
   OrderStoreState,
@@ -25,38 +42,27 @@ export const useOrderStore: OrderStoreDefinition = defineStore<
   actions: {
     async fetch() {
       this.fetching = true;
-      let hasOldVersion = false;
       const orderRepo = new OrderRepo();
       const orders = await orderRepo.getOrders();
-      const count = orders.length;
-
-      orders.forEach((order) => {
-        order.positions.forEach((pos, index) => {
-          if (!pos.modifications) {
-            pos.modifications = [];
-            hasOldVersion = true;
-          }
-          if (!pos.index) {
-            pos.index = index;
-            hasOldVersion = true;
-          }
-        });
-        if (!order.totals) {
-          order.totals = {
-            subTotal: 0,
-            deliveryFee: 0,
-            discountAmount: 0,
-            finalTotal: 0,
-          };
-        }
-      });
-      if (hasOldVersion) await orderRepo.setOrders(orders);
-
+      const normalizedOrders = normalizeOrders(orders);
+      if (JSON.stringify(orders) !== JSON.stringify(normalizedOrders)) {
+        await orderRepo.setOrders(normalizedOrders);
+      }
       this.$patch({
-        orders,
-        count,
+        orders: normalizedOrders,
+        count: normalizedOrders.length,
       });
       this.fetching = false;
+    },
+    async setOrders(orders: Order[]) {
+      const orderRepo = new OrderRepo();
+      const normalizedOrders = normalizeOrders(orders);
+
+      await orderRepo.setOrders(normalizedOrders);
+      this.$patch({
+        orders: normalizedOrders,
+        count: normalizedOrders.length,
+      });
     },
     async add(order) {
       const orderRepo = new OrderRepo();
