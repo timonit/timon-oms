@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import type { Product } from '@/shared/model/product';
 import ProductCard from './product.card.vue';
-import { computed, onMounted, ref } from 'vue';
-import { AppToolbar, FlexCol } from '@/shared/ui';
+import { computed, ref } from 'vue';
+import { FlexCol } from '@/shared/ui';
+import ProductTypeTabs from './product-type-tabs.vue';
+
+defineOptions({ name: 'ProductsGrid' });
 
 type ProductsGridProps = {
   products: Product[];
@@ -29,10 +32,6 @@ const pick = (product: Product) => {
 
 const currentType = ref<string>();
 
-const setCurrentType = (name: string) => {
-  currentType.value = name;
-};
-
 const types = computed(() => {
   return props.products.reduce<string[]>(
     (acc, prod) => {
@@ -43,26 +42,24 @@ const types = computed(() => {
   );
 });
 
-const actions = computed(() => {
-  return types.value.map((type) => ({ text: type, handler: () => setCurrentType(type), selected: type === currentType.value }));
-});
-
 const productsByTypes = computed(() => {
   return props.products.filter((p) => p.type === currentType.value);
 });
 
-onMounted(() => {
-  if (types.value[0]) setCurrentType(types.value[0]);
-});
 </script>
 
 <template>
   <FlexCol :gap="4">
-    <AppToolbar :actions="actions" />
+    <ProductTypeTabs
+      v-if="types.length"
+      v-model="currentType"
+      :types="types"
+    />
 
     <div class="grid gap-2 items-start content-start">
       <ProductCard
         v-for="product in productsByTypes"
+        :key="product.id"
         :product="product"
         @click="pick(product)"
         class="cursor-pointer select-none"
